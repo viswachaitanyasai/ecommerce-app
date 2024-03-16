@@ -1,0 +1,25 @@
+.app__pagenotfound{
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    flex-wrap: wrap;
+    padding: 2rem;
+    &>*{
+        margin: 1rem;
+    }
+    h1{
+        font-size: 7rem;
+    }
+    a{
+        padding: 0.7rem;
+        background-color: var(--secondary-color);
+        text-decoration: none;
+        color: var(--primary-color);
+        border-radius: 1rem;
+        transition: all 0.2s ease-in-out;
+        &:hover{
+            scale: 1.1;
+        }
+    }
+}

@@ -1,0 +1,17 @@
+.app__home{
+    display: flex;
+    flex-direction: row;
+}
+
+.app__home-products-box{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.app__home-filter{
+    .app__home-filter-check{
+        display: flex;
+        flex-direction: column;
+    }
+}

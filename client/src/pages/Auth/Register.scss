@@ -1,0 +1,65 @@
+.app__register{
+    padding: 1.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.app__register-form-box{
+    width: 36%;
+    padding: 2rem;
+    background-color: var(--primary-color);
+    border-radius: 1rem;
+}
+
+.app__register-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    button{
+        padding: 0.6rem;
+        margin-top: 1rem;
+        width: 7rem;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        border: none;
+        border-radius: 1rem;
+        transition: all 0.2s ease-in-out;
+        &:hover{
+            scale: 1.1;
+        }
+    }
+}
+
+.app__register-form1{
+    padding: 1rem 1rem 0 1rem;
+    display: flex;
+    flex-direction: row;
+    div{
+        padding: 1rem 1rem 0 1rem;
+    }
+    input{
+        padding: 0.7rem;
+        margin: 0.5rem 0;
+        border-radius: 0.4rem;
+        border-style:hidden;
+    }
+}
+
+.app__register-form2{
+    padding: 0rem 2rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 110%;
+    input{
+        padding: 0.7rem;
+        margin: 0.5rem 0;
+        border-radius: 0.4rem;
+        border-style:hidden;
+    }
+}

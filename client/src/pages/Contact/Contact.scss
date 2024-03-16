@@ -1,0 +1,46 @@
+.app__contact{
+    display: flex;
+    padding: 3rem 8rem;
+    img{
+        height:25rem;
+        width: 25rem;
+    }
+    // @media(max-width:450px){
+    //     flex-wrap: wrap;
+    // }
+}
+
+.app__contact-para{
+    padding: 2rem;
+    &>*{
+        padding: 0.5rem;
+    }
+}
+
+.app__contact-c{
+    // display: flex;
+    div{
+        display: flex;
+        align-items: center;
+        p{
+            padding: 0.5rem;
+        }
+    }
+}
+
+.app__button{
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    a{
+        padding: 0.7rem;
+        background-color: var(--secondary-color);
+        text-decoration: none;
+        color: var(--primary-color);
+        border-radius: 1rem;
+        transition: all 0.2s ease-in-out;
+        &:hover{
+            scale: 1.1;
+        }
+    }
+}
