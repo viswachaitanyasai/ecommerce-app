@@ -1,4 +1,8 @@
-*{
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* *{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -15,4 +19,4 @@
     --gray-color: #6b7688;
     --brown-color: #46364a;
     --white-color: #ffffff;
-}
+} */
