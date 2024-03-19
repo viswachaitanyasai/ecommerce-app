@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
-import "./Login.scss"
+// import "./Login.scss"
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,41 +40,38 @@ const Login = () => {
   };
   return (
     <Layout>
-        <div className='app__login'>
-            <div className='app__login-form-box'>
-            <h1>LogIn Here</h1>
-            <form onSubmit={handleSubmit} className='app__login-form'>
-                <div className='app__login-form1'>
-                    <div>
-                        <p>Enter your Email :</p>
-                        <input
-                            value={email}
-                            type='email'
-                            placeholder='email'
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <p>Enter your Password :</p>
-                        <input
-                            value={password}
-                            type='password'
-                            placeholder='password'
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                </div>
-                <div className="button_box">
-                  <button className="button-2" type='submit'>LogIn</button>
-                  <button className="button-1" type='button' onClick={()=>{navigate("/forgot-password")}}>Forgot Password</button>
-                </div>
-            </form>
-            </div>
+      <div className='app__login flex flex-row'>
+        <div className="hidden md:block md:w-1/2">
+          Photo Here
         </div>
-    </Layout>
+        <div className='app__login-form-box md:w-1/2 w-full flex flex-col items-center'>
+          <h1 className="my-12 text-4xl">Welcome Back !</h1>
+          <form onSubmit={handleSubmit} className='app__login-form w-2/3 flex flex-col items-center space-y-5 md:space-y-8'>
+            <input
+              className='p-2 w-4/5 placeholder:text-sm rounded-lg border-2 border-gray-300'
+              value={email}
+              type='email'
+              placeholder='email'
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <input
+              className='p-2 w-4/5 placeholder:text-sm rounded-lg border-2 border-gray-300'
+              value={password}
+              type='password'
+              placeholder='password'
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <div className="button_box flex flex-col items-center">
+              <button className="py-2 px-3 m-3 rounded-lg border-2 bg-slate-500 text-slate-200" type='submit'>LogIn</button>
+              <button className="button-1 font-medium m-2" type='button' onClick={() => { navigate("/register") }}><span className="text-xs">New to website ? </span>Create an account</button>
+              <button className="button-1 m-2" type='button' onClick={() => { navigate("/forgot-password") }}>Forgot Password ?</button>
+            </div>
+          </form>
+        </div>
+      </div >
+    </Layout >
   );
 };
 

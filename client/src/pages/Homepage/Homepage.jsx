@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import "./Homepage.scss"
+// import "./Homepage.scss"
 import Layout from '../../components/Layouts/Layout'
 import axios from 'axios'
 import { Checkbox, Radio } from "antd";
@@ -7,6 +7,7 @@ import { Prices } from '../../components/Prices';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/cart';
 import toast from 'react-hot-toast';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 const Homepage = () => {
   const navigate = useNavigate();
@@ -103,48 +104,48 @@ const Homepage = () => {
   }, [checked, radio])
   return (
     <Layout>
-      <div className='app__home'>
-        <div className='app__home-filter'>
-          <h3>Filter by Category</h3>
+      <div className='app__home flex flex-col w-full items-center'>
+        <h1 className='my-6'>All Products</h1>
+        <div className='app__home-filter flex flex-row space-x-4 w-full pl-6 pb-4'>
           <div className='app__home-filter-check'>
-            {categories.map((c) => (
-              <Checkbox key={c._id} onChange={(e) => handleFilter(e.target.checked, c._id)}>{c.name}</Checkbox>
-            ))}
-          </div>
-          <h3>Filter by Price</h3>
-          <div className='app__home-filter-check'>
-            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
-              {Prices.map(p => (
-                <div key={p._id}>
-                  <Radio value={p.array}>{p.name}</Radio>
-                </div>
+            <NavDropdown title="Category" id="basic-category-dropdown" className='app__home-dropdown'>
+              {categories.map((c) => (
+                <NavDropdown.Item><Checkbox key={c._id} onChange={(e) => handleFilter(e.target.checked, c._id)}>{c.name}</Checkbox></NavDropdown.Item>
               ))}
-            </Radio.Group>
+            </NavDropdown>
           </div>
-          <div>
-            <button onClick={() => window.location.reload()}>Rest Filter</button>
+          <div className='app__home-filter-check'>
+            <NavDropdown title="Price" id="basic-proce-dropdown" className='app__home-dropdown'>
+              <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+                {Prices.map(p => (
+                  <div key={p._id}>
+                    <Radio value={p.array}>{p.name}</Radio>
+                  </div>
+                ))}
+              </Radio.Group>
+              <button className='ml-6' onClick={() => window.location.reload()}>Rest Filter</button>
+            </NavDropdown>
           </div>
         </div>
         <div>
-          <h1>All Products</h1>
-          <div className='app__home-products-box'>
+          <div className='app__home-products-box flex flex-wrap justify-center'>
             {products?.map((p) => (
-              <div style={{ width: "15.5rem" }}>
-                <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} alt={p.name} style={{ width: "14rem" }} />
-                <div>
-                  <h5>{p.name}</h5>
-                  <p>{p.description.substring(0, 15)}...</p>
-                  <p>Rs. {p.price}</p>
-                  <button onClick={() => navigate(`/product/${p.slug}`)}>More Details</button>
-                  <button onClick={
-                    () => {
-                      setCart([...cart, p]);
-                      localStorage.setItem('cart', JSON.stringify([...cart, p]));
-                      toast.success("Item Added to Cart");
-                    }}>
-                    Add to cart
-                  </button>
+              <div className='m-4 flex flex-col items-center cursor-pointer' onClick={() => navigate(`/product/${p.slug}`)}>
+                <img className='w-64' src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} alt={p.name} />
+                <div className='w-5/6'>
+                  <p className='m-0 font-medium'>{p.name}</p>
+                  <p className='m-0'>{p.description.substring(0, 15)}...</p>
+                  <p className='m-0 font-medium text-xl'>Rs. {p.price}</p>
                 </div>
+                <button
+                  className='py-2 px-4 w-full rounded-lg border-2 bg-slate-500 text-slate-200'
+                  onClick={() => {
+                    setCart([...cart, p]);
+                    localStorage.setItem('cart', JSON.stringify([...cart, p]));
+                    toast.success("Item Added to Cart");
+                  }}>
+                  Add to cart
+                </button>
               </div>
             ))}
           </div>

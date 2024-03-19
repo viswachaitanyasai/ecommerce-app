@@ -20,7 +20,7 @@ const SearchInput = () => {
     return (
         <>
             <form className='flex' role='search' onSubmit={handleSubmit}>
-                <input className='border-2 rounded-full p-2' type='search' placeholder='search' value={values.keyword} onChange={(e) => setValues({ ...values, keyword: e.target.value })} />
+                <input className='border-2 rounded-full py-2 px-3' type='search' placeholder='search' value={values.keyword} onChange={(e) => setValues({ ...values, keyword: e.target.value })} />
                 <button className='p-2 border-2 rounded-full ml-2' type='submit'><img src='./images/search.png'></img></button>
             </form>
         </>

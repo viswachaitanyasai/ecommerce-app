@@ -26,7 +26,7 @@ const Header = () => {
   }
   return (
     <nav className="app__navbar w-full">
-      <div className='flex p-2 w-full items-center justify-between z-10 absolute top-0 bg-slate-50'>
+      <div className='flex py-2 px-3 w-full items-center justify-between z-10 fixed top-0 bg-slate-50 border-2'>
         <h1 className='text-xl m-0'>ShopIt</h1>
         <div className='flex flex-row items-center space-x-4 md:space-x-8'>
           <SearchInput />
@@ -83,7 +83,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className={`absolute p-3 z-[1] bg-slate-500 w-full flex flex-col items-center space-y-1 transition-all ease-in-out ${isOpen ? 'top-14' : 'top-[-100%]'}`}>
+      <div className={`absolute p-3 z-[1] bg-slate-500 w-full flex flex-col items-center space-y-1 transition-all duration-300 ease-in-out ${isOpen ? 'top-14' : 'top-[-100%]'}`}>
         <NavLink className={'no-underline text-black'} to="/home" >home</NavLink>
         {categories?.map((c, index) => (
           <Link to={`/category/${c.slug}`} key={index} style={{ textDecoration: "none", color: "black" }}>{c.name}</Link>
