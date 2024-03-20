@@ -99,6 +99,13 @@ const Homepage = () => {
     }
   }
 
+  const goTop = ()=>{
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    })
+  }
+
   useEffect(() => {
     if (checked.length || radio.length) filterProducts();
   }, [checked, radio])
@@ -130,12 +137,14 @@ const Homepage = () => {
         <div>
           <div className='app__home-products-box flex flex-wrap justify-center'>
             {products?.map((p) => (
-              <div className='m-4 flex flex-col items-center cursor-pointer' onClick={() => navigate(`/product/${p.slug}`)}>
-                <img className='w-64' src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} alt={p.name} />
-                <div className='w-5/6'>
-                  <p className='m-0 font-medium'>{p.name}</p>
-                  <p className='m-0'>{p.description.substring(0, 15)}...</p>
-                  <p className='m-0 font-medium text-xl'>Rs. {p.price}</p>
+              <div className='p-2 md:m-4 flex flex-col items-center'>
+                <div className='flex flex-col items-center cursor-pointer' onClick={() => {navigate(`/product/${p.slug}`);goTop();}}>
+                  <img className='w-44 md:w-64' src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} alt={p.name} />
+                  <div className='w-5/6'>
+                    <p className='m-0 font-medium'>{p.name}</p>
+                    <p className='m-0'>{p.description.substring(0, 15)}...</p>
+                    <p className='m-0 font-medium text-xl'>Rs. {p.price}</p>
+                  </div>
                 </div>
                 <button
                   className='py-2 px-4 w-full rounded-lg border-2 bg-slate-500 text-slate-200'
@@ -149,9 +158,11 @@ const Homepage = () => {
               </div>
             ))}
           </div>
-          <div>
+          <div className='flex justify-center m-6'>
             {products && products.length < total && (
-              <button onClick={(e) => { e.preventDefault(); setPage(page + 1) }}>
+              <button
+                className='py-2 px-4 w-32 rounded-lg border-2 bg-slate-500 text-slate-200'
+                onClick={(e) => { e.preventDefault(); setPage(page + 1) }}>
                 {loading ? "loading..." : "load more"}
               </button>
             )}

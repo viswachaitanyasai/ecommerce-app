@@ -14,7 +14,7 @@ const Layout = ({children}) => {
           <Toaster/>
           {children}
         </main>
-      {/* <Footer/> */}
+      <Footer/>
     </>
   )
 };

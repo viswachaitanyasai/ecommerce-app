@@ -18,7 +18,6 @@ function App() {
         <Route path="/search" element={<Search />} />
 
         <Route path="/dashboard" element={<PrivateRoute />}>
-          <Route path="user" element={<Dashboard />} />
           <Route path="user/profile" element={<Profile />} />
           <Route path="user/orders" element={<Orders />} />
         </Route>

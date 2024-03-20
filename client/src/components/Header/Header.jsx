@@ -25,8 +25,8 @@ const Header = () => {
     toast.success("Log Out Successfully");
   }
   return (
-    <nav className="app__navbar w-full">
-      <div className='flex py-2 px-3 w-full items-center justify-between z-10 fixed top-0 bg-slate-50 border-2'>
+    <nav className="app__navbar w-full fixed top-0">
+      <div className='flex py-2 px-3 w-full items-center justify-between z-[2] bg-slate-50 border-2'>
         <h1 className='text-xl m-0'>ShopIt</h1>
         <div className='flex flex-row items-center space-x-4 md:space-x-8'>
           <SearchInput />
@@ -68,7 +68,7 @@ const Header = () => {
                 </div>
               </>) : (<>
                 <div>
-                  <NavLink className={'text-black no-underline'} to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`} >Dashboard</NavLink>
+                  <NavLink className={'text-black no-underline'} to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}/profile`} >Dashboard</NavLink>
                 </div>
                 <div>
                   <NavLink className={'text-black no-underline'} onClick={handleLogOut} to="/login" >Log Out</NavLink>
@@ -83,7 +83,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className={`absolute p-3 z-[1] bg-slate-500 w-full flex flex-col items-center space-y-1 transition-all duration-300 ease-in-out ${isOpen ? 'top-14' : 'top-[-100%]'}`}>
+      <div className={`absolute p-3 z-[1] bg-slate-500 w-full flex flex-col items-center space-y-1 transition-all duration-300 ease-in-out ${isOpen ? 'right-0' : 'right-[-100%]'}`}>
         <NavLink className={'no-underline text-black'} to="/home" >home</NavLink>
         {categories?.map((c, index) => (
           <Link to={`/category/${c.slug}`} key={index} style={{ textDecoration: "none", color: "black" }}>{c.name}</Link>

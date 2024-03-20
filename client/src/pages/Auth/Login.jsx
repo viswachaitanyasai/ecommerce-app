@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useAuth } from "../../context/auth";
+import { set } from "mongoose";
 // import "./Login.scss"
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -38,6 +39,12 @@ const Login = () => {
       toast.error("Something went wrong");
     }
   };
+
+  const handleGuest = () =>{
+    setEmail("guest@guest.com");
+    setPassword("123456789");
+  }
+
   return (
     <Layout>
       <div className='app__login flex flex-row'>
@@ -64,13 +71,16 @@ const Login = () => {
               required
             />
             <div className="button_box flex flex-col items-center">
-              <button className="py-2 px-3 m-3 rounded-lg border-2 bg-slate-500 text-slate-200" type='submit'>LogIn</button>
+              <div className="flex flex-row space-y-4">
+                <button className="py-2 px-3 m-3 rounded-lg border-2 bg-slate-500 text-slate-200" type='submit'>LogIn</button>
+                <div className="py-2 px-3 m-3 rounded-lg border-2 bg-slate-500 text-slate-200 cursor-pointer" onClick={()=> handleGuest()}>Guest</div>
+              </div>
               <button className="button-1 font-medium m-2" type='button' onClick={() => { navigate("/register") }}><span className="text-xs">New to website ? </span>Create an account</button>
               <button className="button-1 m-2" type='button' onClick={() => { navigate("/forgot-password") }}>Forgot Password ?</button>
             </div>
           </form>
         </div>
-      </div >
+      </div>
     </Layout >
   );
 };
