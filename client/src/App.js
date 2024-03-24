@@ -1,6 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { Homepage, About, Contact, Policy, PageNotFound, Register, Login, Dashboard, ForgotPassword, AdminDashboard, CreateCategory, CreateProduct, Users, Profile, Orders, Products, UpdateProducts, Search, ProductDetails, Categories, CategoryProduct, CartPage } from "./pages/pages";
+import { Homepage, About, Contact, Policy, PageNotFound, Register, Login, ForgotPassword, CreateCategory, CreateProduct, Profile, Orders, Products, UpdateProducts, Search, ProductDetails, Categories, CategoryProduct, CartPage } from "./pages/pages";
 import PrivateRoute from "./components/routes/Private";
 import AdminRoute from "./components/routes/AdminRoute";
 import AdminOrders from "./pages/Admin/AdminOrders";
@@ -23,12 +23,10 @@ function App() {
         </Route>
 
         <Route path="/dashboard" element={<AdminRoute />}>
-          <Route path="admin" element={<AdminDashboard />} />
           <Route path="admin/create-category" element={<CreateCategory />} />
           <Route path="admin/create-product" element={<CreateProduct />} />
           <Route path="admin/products/:slug" element={<UpdateProducts />} />
           <Route path="admin/products" element={<Products />} />
-          <Route path="admin/users" element={<Users />} />
           <Route path="admin/orders" element={<AdminOrders />} />
         </Route>
 

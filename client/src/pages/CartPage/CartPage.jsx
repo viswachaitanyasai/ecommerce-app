@@ -82,7 +82,7 @@ const CartPage = () => {
                     </h4>
                     <div className='app__cart-items flex flex-wrap justify-center m-4'>
                         {cart.map((p) => (
-                            <div className='w-72 h-32 m-2 flex flex-row justify-around border-2 rounded-lg'>
+                            <div className='w-72 h-28 m-2 flex flex-row justify-around border-2 rounded-lg'>
                                 <div className='w-16 flex items-center cursor-pointer'>
                                     <img className='rounded-md' src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} alt={p.name} onClick={() => navigate(`/product/${p.slug}`)} />
                                 </div>

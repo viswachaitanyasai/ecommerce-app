@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Layout from '../../components/Layouts/Layout'
-import AdminMenu from '../../components/AdminMenu/AdminMenu'
 import toast from 'react-hot-toast'
 import axios from 'axios'
 import CategoryForm from '../../components/Form/CategoryForm'
 import { Modal } from "antd"
+import AdminDashboard from './AdminDashboard'
 
 const CreateCategory = () => {
     const [categories, setCategories] = useState([]);
@@ -50,14 +49,14 @@ const CreateCategory = () => {
     const handleUpdate = async (e) => {
         e.preventDefault();
         try {
-            const {data} = await axios.put(`${process.env.REACT_APP_API}/api/v1/category/update-category/${selected._id}`, {name:updatedName});
-            if(data.success){
+            const { data } = await axios.put(`${process.env.REACT_APP_API}/api/v1/category/update-category/${selected._id}`, { name: updatedName });
+            if (data.success) {
                 toast.success(`${updatedName} is updated`);
                 setSelected(null);
                 setUpdatedName("");
                 setVisible(false);
                 getAllCategory();
-            }else{
+            } else {
                 toast.error(data.message);
             }
         } catch (error) {
@@ -68,11 +67,11 @@ const CreateCategory = () => {
 
     const handleDelete = async (pId) => {
         try {
-            const {data} = await axios.delete(`${process.env.REACT_APP_API}/api/v1/category/delete-category/${pId}`, {name:updatedName});
-            if(data.success){
+            const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/category/delete-category/${pId}`, { name: updatedName });
+            if (data.success) {
                 toast.success(`category is deleted`);
                 getAllCategory();
-            }else{
+            } else {
                 toast.error(data.message);
             }
         } catch (error) {
@@ -83,31 +82,28 @@ const CreateCategory = () => {
 
     return (
         <>
-            <Layout>
-                <div className='app__admin-dashboard'>
-                    <div>
-                        <AdminMenu />
-                    </div>
-                    <div>
-                        <h1>Manage Catogory</h1>
+            <AdminDashboard>
+                <div className='app__admin-dashboard flex flex-col py-6'>
+                    <div className='flex flex-col items-center'>
+                        <h1 className='mx-auto'>Manage Catogory</h1>
                         <div>
                             <CategoryForm handleSubmit={handleSubmit} value={name} setValue={setName} />
                         </div>
-                        <table>
+                        <table className='w-96 my-6'>
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Action</th>
+                                    <th className='p-2'>Name</th>
+                                    <th className='p-2 text-center'>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {categories?.map(c => (
                                     <>
                                         <tr>
-                                            <td key={c._id}>{c.name}</td>
-                                            <td>
-                                                <button onClick={() => {setVisible(true); setUpdatedName(c.name); setSelected(c)}}>Edit</button>
-                                                <button onClick={() => {handleDelete(c._id)}}>Delete</button>
+                                            <td className='p-2' key={c._id}>{c.name}</td>
+                                            <td className='flex flex-row justify-evenly'>
+                                                <button className='py-1 px-3 rounded-lg border-2 bg-slate-500 text-slate-200' onClick={() => { setVisible(true); setUpdatedName(c.name); setSelected(c) }}>Edit</button>
+                                                <button className='py-1 px-3 rounded-lg border-2 bg-slate-500 text-slate-200' onClick={() => { handleDelete(c._id) }}>Delete</button>
                                             </td>
                                         </tr>
                                     </>
@@ -116,10 +112,10 @@ const CreateCategory = () => {
                         </table>
                     </div>
                     <Modal onCancel={() => setVisible(false)} footer={null} visible={visible}>
-                        <CategoryForm value={updatedName} setValue={setUpdatedName} handleSubmit={handleUpdate}/>
+                        <CategoryForm value={updatedName} setValue={setUpdatedName} handleSubmit={handleUpdate} />
                     </Modal>
                 </div>
-            </Layout>
+            </AdminDashboard>
         </>
     )
 }

@@ -99,7 +99,7 @@ const Homepage = () => {
     }
   }
 
-  const goTop = ()=>{
+  const goTop = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth"
@@ -115,14 +115,14 @@ const Homepage = () => {
         <h1 className='my-6'>All Products</h1>
         <div className='app__home-filter flex flex-row space-x-4 w-full pl-6 pb-4'>
           <div className='app__home-filter-check'>
-            <NavDropdown title="Category" id="basic-category-dropdown" className='app__home-dropdown'>
+            <NavDropdown title="Category" id="basic-category-dropdown" className='app__home-dropdown text-slate-500'>
               {categories.map((c) => (
                 <NavDropdown.Item><Checkbox key={c._id} onChange={(e) => handleFilter(e.target.checked, c._id)}>{c.name}</Checkbox></NavDropdown.Item>
               ))}
             </NavDropdown>
           </div>
           <div className='app__home-filter-check'>
-            <NavDropdown title="Price" id="basic-proce-dropdown" className='app__home-dropdown'>
+            <NavDropdown title="Price" id="basic-proce-dropdown" className='app__home-dropdown text-slate-500'>
               <Radio.Group onChange={(e) => setRadio(e.target.value)}>
                 {Prices.map(p => (
                   <div key={p._id}>
@@ -138,7 +138,7 @@ const Homepage = () => {
           <div className='app__home-products-box flex flex-wrap justify-center'>
             {products?.map((p) => (
               <div className='p-2 md:m-4 flex flex-col items-center'>
-                <div className='flex flex-col items-center cursor-pointer' onClick={() => {navigate(`/product/${p.slug}`);goTop();}}>
+                <div className='flex flex-col items-center cursor-pointer' onClick={() => { navigate(`/product/${p.slug}`); goTop(); }}>
                   <img className='w-44 md:w-64' src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} alt={p.name} />
                   <div className='w-5/6'>
                     <p className='m-0 font-medium'>{p.name}</p>

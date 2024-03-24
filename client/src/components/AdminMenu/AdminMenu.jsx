@@ -1,18 +1,17 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
-import "./AdminMenu.scss"
+import { NavLink, useLocation } from 'react-router-dom'
+// import "./AdminMenu.scss"
 
 const AdminMenu = () => {
+  const location = useLocation();
   return (
     <>
-      <div className='app__menu-list'>
-        <h1>Admin Panel</h1>
-        <div className='app__menu-list-links'>
-          <NavLink className="link-1" to="/dashboard/admin/create-category">Create Category</NavLink>
-          <NavLink className="link-2" to="/dashboard/admin/create-product">Create Product</NavLink>
-          <NavLink className="link-2" to="/dashboard/admin/products">Products</NavLink>
-          <NavLink className="link-2" to="/dashboard/admin/orders">Orders</NavLink>
-          <NavLink className="link-3" to="/dashboard/admin/users">Users</NavLink>
+      <div className='app__menu-list flex flex-col items-center'>
+        <div className='app__menu-list-links flex flex-row justify-center'>
+          <NavLink className={`mx-2 text-slate-800 ${location.pathname === '/dashboard/admin/create-category' ? 'font-bold text-black underline underline-offset-8' : 'no-underline'}`} to="/dashboard/admin/create-category">Create Category</NavLink>
+          <NavLink className={`mx-2 text-slate-800 ${location.pathname === '/dashboard/admin/create-product' ? 'font-bold text-black underline underline-offset-8' : 'no-underline'}`} to="/dashboard/admin/create-product">Create Product</NavLink>
+          <NavLink className={`mx-2 text-slate-800 ${location.pathname === '/dashboard/admin/products' ? 'font-bold text-black underline underline-offset-8' : 'no-underline'}`} to="/dashboard/admin/products">Products</NavLink>
+          <NavLink className={`mx-2 text-slate-800 ${location.pathname === '/dashboard/admin/orders' ? 'font-bold text-black underline underline-offset-8' : 'no-underline'}`} to="/dashboard/admin/orders">Orders</NavLink>
         </div>
       </div>
     </>

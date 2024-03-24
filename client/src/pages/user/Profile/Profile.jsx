@@ -55,56 +55,66 @@ const Profile = () => {
                         <p className='text-xs'>Welcome to dashboard</p>
                         <form onSubmit={handleSubmit} className='app__profile-form flex flex-col items-center'>
                             <div className='app__profile-form1'>
-                                <div>
-                                    <p className='mb-2 text-xs'>Your Name :</p>
-                                    <input
-                                        className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                                        value={name}
-                                        type='text'
-                                        placeholder='name'
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
-                                    <p className='mb-2 text-xs'>Your Email :</p>
-                                    <input
-                                        className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                                        value={email}
-                                        type='email'
-                                        placeholder='email'
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        disabled
-                                    />
-                                    <p className='mb-2 text-xs'>Your Password :</p>
-                                    <input
-                                        className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                                        value={password}
-                                        type='password'
-                                        placeholder='password'
-                                        onChange={(e) => setPassword(e.target.value)}
-                                    />
-                                    <p className='mb-2 text-xs'>Your Phone No :</p>
-                                    <input
-                                        className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                                        value={phone}
-                                        type='text'
-                                        placeholder='phone no'
-                                        onChange={(e) => setPhone(e.target.value)}
-                                    />
-                                    <p className='mb-2 text-xs'>Your Address :</p>
-                                    <input
-                                        className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                                        value={address}
-                                        type='text'
-                                        placeholder='address'
-                                        onChange={(e) => setAddress(e.target.value)}
-                                    />
+                                <div className='md:flex md:flex-row md:space-x-6'>
+                                    <div>
+                                        <p className='mb-2 text-xs'>Your Name :</p>
+                                        <input
+                                            className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
+                                            value={name}
+                                            type='text'
+                                            placeholder='name'
+                                            onChange={(e) => setName(e.target.value)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className='mb-2 text-xs'>Your Email :</p>
+                                        <input
+                                            className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
+                                            value={email}
+                                            type='email'
+                                            placeholder='email'
+                                            onChange={(e) => setEmail(e.target.value)}
+                                            disabled
+                                        />
+                                    </div>
                                 </div>
+                                <div className='md:flex md:flex-row md:space-x-6'>
+                                    <div>
+                                        <p className='mb-2 text-xs'>Your Password :</p>
+                                        <input
+                                            className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
+                                            value={password}
+                                            type='password'
+                                            placeholder='password'
+                                            onChange={(e) => setPassword(e.target.value)}
+                                        />
+                                    </div>
+                                    <div>
+                                        <p className='mb-2 text-xs'>Your Phone No :</p>
+                                        <input
+                                            className='py-2 px-3 w-64 mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
+                                            value={phone}
+                                            type='text'
+                                            placeholder='phone no'
+                                            onChange={(e) => setPhone(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                                <p className='mb-2 text-xs'>Your Address :</p>
+                                <input
+                                    className='py-2 px-3 w-64 md:w-full mb-4 placeholder:text-sm rounded-lg border-2 border-gray-300'
+                                    value={address}
+                                    type='text'
+                                    placeholder='address'
+                                    onChange={(e) => setAddress(e.target.value)}
+                                />
                             </div>
                             <button className="py-2 px-3 m-3 rounded-lg border-2 bg-slate-500 text-slate-200" type='submit'>Update</button>
                         </form>
                     </div>
                 </div>
-            </div>
-        </Layout>
+            </div >
+        </Layout >
     )
 }
 

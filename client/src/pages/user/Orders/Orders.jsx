@@ -78,7 +78,7 @@ const Orders = () => {
           <h1>All Orders</h1>
           {orders.length === 0 ? <h1>No Orders</h1>
             :
-            (<Card className="h-full w-full overflow-scroll">
+            (<Card className="h-full w-full overflow-scroll -z-10">
               <table className="w-full min-w-max table-auto text-left">
                 <thead>
                   <tr>

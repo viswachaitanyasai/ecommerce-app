@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Layout from '../../components/Layouts/Layout'
-import AdminMenu from '../../components/AdminMenu/AdminMenu'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { Select } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom'
+import AdminDashboard from './AdminDashboard'
 const { Option } = Select;
 
 const UpdateProducts = () => {
@@ -22,7 +21,7 @@ const UpdateProducts = () => {
 
   const getSingleProduct = async () => {
     try {
-      const {data} = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`)
+      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`)
       setName(data.product.name);
       setId(data.product._id);
       setDescription(data.product.description);
@@ -39,7 +38,7 @@ const UpdateProducts = () => {
   useEffect(() => {
     getSingleProduct();
     //eslint-disable-next-line
-  },[])
+  }, [])
 
   const getAllCategory = async () => {
     try {
@@ -83,8 +82,8 @@ const UpdateProducts = () => {
   const handleDelete = async () => {
     try {
       let answer = window.prompt("Are you sure do you want to delete? (yes or no)")
-      if(!answer) return;
-      const {data} = await axios.delete(`${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`)
+      if (!answer) return;
+      const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`)
       toast.success("Product Deleted Successfully");
       navigate("/dashboard/admin/products");
     } catch (error) {
@@ -95,11 +94,8 @@ const UpdateProducts = () => {
 
   return (
     <>
-      <Layout>
+      <AdminDashboard>
         <div className='app__admin-dashboard'>
-          <div>
-            <AdminMenu />
-          </div>
           <div>
             <h1>Update Product</h1>
             <div>
@@ -109,7 +105,7 @@ const UpdateProducts = () => {
                 size='large'
                 showSearch
                 onChange={(value) => { setCategory(value) }}
-                value = {category}
+                value={category}
               >
                 {categories?.map(c => (
                   <Option key={c._id} value={c._id}>{c.name}</Option>
@@ -179,7 +175,7 @@ const UpdateProducts = () => {
             </div>
           </div>
         </div>
-      </Layout>
+      </AdminDashboard>
     </>
   )
 }

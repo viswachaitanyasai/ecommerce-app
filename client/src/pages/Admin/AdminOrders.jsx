@@ -7,6 +7,8 @@ import axios from 'axios'
 import toast from 'react-hot-toast'
 import moment from 'moment'
 import { Select } from 'antd'
+import AdminDashboard from './AdminDashboard'
+
 const { Option } = Select;
 const AdminOrders = () => {
     const [status, setStatus] = useState(["Not Process", "Processing", "Shipped", "deliverd", "cancel"]);
@@ -38,67 +40,49 @@ const AdminOrders = () => {
         }
     };
     return (
-        <Layout>
-            <div className='app_adminOrder'>
-                <div>
-                    <AdminMenu />
-                </div>
-                <div>
-                    <h1>All Orders</h1>
-                    {orders.map((o, i) => {
-                        return (
-                            <div>
-                                <table>
-                                    <thead>
-                                        <th>#</th>
-                                        <th>Status</th>
-                                        <th>Buyer</th>
-                                        <th>Orders</th>
-                                        <th>Payment</th>
-                                        <th>Quantity</th>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>{i + 1}</td>
-                                            <td>
-                                                <Select
-                                                    onChange={(value) => handleChange(o._id, value)}
-                                                    defaultValue={o?.status}
-                                                >
-                                                    {status.map((s, i) => (
-                                                        <Option key={i} value={s}>
-                                                            {s}
-                                                        </Option>
-                                                    ))}
-                                                </Select>
-                                            </td>
-                                            <td>{o?.buyer?.name}</td>
-                                            <td>{moment(o?.createAt).fromNow()}</td>
-                                            <td>{o?.payment.success ? "Success" : "Failed"}</td>
-                                            <td>{o?.products?.length}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <div>
-                                    {o?.products?.map((p, i) => (
-                                        <div>
-                                            <div>
-                                                <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${p._id}`} alt={p.name} style={{ width: "14rem" }} />
-                                            </div>
-                                            <div>
-                                                <p>{p.name}</p>
-                                                <p>{p.description.substring(0, 10)}</p>
-                                                <p>Price :{p.price}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )
-                    })}
+        <AdminDashboard>
+            <div className='flex flex-col items-center p-6'>
+                <h1>All Orders</h1>
+
+                <div className='pb-4 border-2 rounded-3xl'>
+                    <table>
+                        <thead>
+                            <th className='p-3 md:p-4 text-xs md:text-base'>#</th>
+                            <th className='p-3 md:p-4 text-xs md:text-base'>Status</th>
+                            <th className='p-3 md:p-4 text-xs md:text-base'>Buyer</th>
+                            <th className='p-3 md:p-4 text-xs md:text-base hidden md:block'>Orders</th>
+                            <th className='p-3 md:p-4 text-xs md:text-base'>Payment</th>
+                            <th className='p-3 md:p-4 text-xs md:text-base'>Quantity</th>
+                        </thead>
+                        <tbody>
+                            {orders.map((o, i) => {
+                                return (
+                                    <tr>
+                                        <td className='text-center text-xs md:text-base'>{i + 1}</td>
+                                        <td className='text-center w-4 text-xs md:text-base'>
+                                            <Select
+                                                onChange={(value) => handleChange(o._id, value)}
+                                                defaultValue={o?.status}
+                                            >
+                                                {status.map((s, i) => (
+                                                    <Option key={i} value={s}>
+                                                        {s}
+                                                    </Option>
+                                                ))}
+                                            </Select>
+                                        </td>
+                                        <td className='text-center text-xs md:text-base'>{o?.buyer?.name}</td>
+                                        <td className='text-center text-xs md:text-base hidden md:block'>{moment(o?.createAt).fromNow()}</td>
+                                        <td className='text-center text-xs md:text-base'>{o?.payment.success ? "Success" : "Failed"}</td>
+                                        <td className='text-center text-xs md:text-base'>{o?.products?.length}</td>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </Layout>
+        </AdminDashboard>
     )
 }
 
