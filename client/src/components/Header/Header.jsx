@@ -49,11 +49,10 @@ const Header = () => {
           <div className='hidden md:block'>
             <div className='flex flex-row px-2 space-x-10'>
               <div>
-                <NavLink className={'text-black no-underline'} to="/home" >home</NavLink>
+                <NavLink className={'text-black no-underline'} to="/" >home</NavLink>
               </div>
 
               <NavDropdown title="Category" id="basic-nav-dropdown" className='app__header-dropdown'>
-                <NavDropdown.Item><Link style={{ textDecoration: "none", color: "black" }} to={`/categories`}>All categories</Link></NavDropdown.Item>
                 {categories?.map((c) => (
                   <NavDropdown.Item><Link className={'text-black no-underline'} to={`/category/${c.slug}`} style={{ textDecoration: "none", color: "black" }}>{c.name}</Link></NavDropdown.Item>
                 ))}
@@ -84,7 +83,7 @@ const Header = () => {
         </div>
       </div>
       <div className={`absolute p-3 z-10 bg-slate-500 w-full flex flex-col items-center space-y-1 transition-all duration-300 ease-in-out ${isOpen ? 'right-0' : 'right-[-100%]'}`}>
-        <NavLink className={'no-underline text-black'} to="/home" >home</NavLink>
+        <NavLink className={'no-underline text-black'} to="/" >home</NavLink>
         {categories?.map((c, index) => (
           <Link to={`/category/${c.slug}`} key={index} style={{ textDecoration: "none", color: "black" }}>{c.name}</Link>
         ))}

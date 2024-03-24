@@ -123,7 +123,7 @@ const Homepage = () => {
           </div>
           <div className='app__home-filter-check'>
             <NavDropdown title="Price" id="basic-proce-dropdown" className='app__home-dropdown text-slate-500'>
-              <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+              <Radio.Group className='p-2' onChange={(e) => setRadio(e.target.value)}>
                 {Prices.map(p => (
                   <div key={p._id}>
                     <Radio value={p.array}>{p.name}</Radio>

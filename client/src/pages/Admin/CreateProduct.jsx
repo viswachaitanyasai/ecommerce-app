@@ -60,7 +60,7 @@ const CreateProduct = () => {
     return (
         <>
             <AdminDashboard>
-                <div className='app__admin-dashboard flex flex-col items-center py-6'>
+                <div className='flex flex-col items-center py-6'>
                     <h1>CreateProduct</h1>
                     <div className='w-[90%] space-y-4 md:w-[60%]'>
                         <Select bordered={false} placeholder="Select a Category" size='large' showSearch onChange={(value) => { setCategory(value) }}>
@@ -115,7 +115,7 @@ const CreateProduct = () => {
                                 />
                             </div>
                             <Select
-                                bordered={false}
+                                variant={false}
                                 placeholder='Select Shipping'
                                 size='large'
                                 showSearch

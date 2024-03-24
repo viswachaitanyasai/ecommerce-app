@@ -95,66 +95,92 @@ const UpdateProducts = () => {
   return (
     <>
       <AdminDashboard>
-        <div className='app__admin-dashboard'>
-          <div>
+        <div className='app__admin-dashboard py-6'>
+          <div className='flex flex-col items-center'>
             <h1>Update Product</h1>
-            <div>
-              <Select
-                variant={false}
-                placeholder="Select a Category"
-                size='large'
-                showSearch
-                onChange={(value) => { setCategory(value) }}
-                value={category}
-              >
-                {categories?.map(c => (
-                  <Option key={c._id} value={c._id}>{c.name}</Option>
-                ))}
-              </Select>
-              <div>
-                <label>
-                  {photo ? photo.name : "Upload Photo"}
-                  <input type='file' name='photo' accept='image/*' onChange={(e) => setPhoto(e.target.files[0])} hidden />
-                </label>
-              </div>
-              <div>
+            <div className='w-[90%] flex flex-col items-center space-y-4 md:w-[50%]'>
+              <div className='my-4'>
                 {photo ? (
-                  <div>
+                  <div className='w-40'>
                     <img src={URL.createObjectURL(photo)} alt='product photo' height={"200px"} />
                   </div>
                 ) : (
-                  <div>
+                  <div className='w-40'>
                     <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`} alt='product photo' height={"200px"} />
                   </div>
                 )
                 }
               </div>
               <div>
-                <input
-                  type='text'
-                  value={name}
-                  placeholder='write a name'
-                  onChange={(e) => setName(e.target.value)}
-                />
-                <input
-                  type='text'
-                  value={description}
-                  placeholder='write a description'
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-                <input
-                  type='number'
-                  value={price}
-                  placeholder='write a price'
-                  onChange={(e) => setPrice(e.target.value)}
-                />
-                <input
-                  type='number'
-                  value={quantity}
-                  placeholder='write quantity'
-                  onChange={(e) => setQuantity(e.target.value)}
-                />
+                <label className='py-1 px-2 rounded-lg border-2 bg-slate-500 text-slate-200'>
+                  Upload Photo
+                  <input type='file' name='photo' accept='image/*' onChange={(e) => setPhoto(e.target.files[0])} hidden />
+                </label>
+              </div>
+              <div className='w-full'>
+                <p className='text-xs wb-1'>Category :</p>
                 <Select
+                  className='w-40 border-2 rounded-lg'
+                  variant={false}
+                  placeholder="Select a Category"
+                  size='large'
+                  showSearch
+                  onChange={(value) => { setCategory(value) }}
+                  value={category}
+                >
+                  {categories?.map(c => (
+                    <Option key={c._id} value={c._id}>{c.name}</Option>
+                  ))}
+                </Select>
+              </div>
+              <div className='w-full'>
+                <div className='mb-3 flex flex-col md:flex-row md:justify-between'>
+                  <div className='md:w-[40%]'>
+                    <p className='text-xs wb-1'>Name :</p>
+                    <input
+                      className='w-full mb-3 md:mr-4 p-2 border-2 rounded-lg'
+                      type='text'
+                      value={name}
+                      placeholder='write a name'
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  <div className='md:w-[40%]'>
+                    <p className='text-xs wb-1'>Description :</p>
+                    <input
+                      className='w-full md:mr-4 p-2 border-2 rounded-lg'
+                      type='text'
+                      value={description}
+                      placeholder='write a description'
+                      onChange={(e) => setDescription(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className='my-3 flex flex-col md:justify-between md:flex-row'>
+                  <div className='md:w-[40%]'>
+                    <p className='w-full text-xs wb-1'>Price :</p>
+                    <input
+                      className='w-full mb-3 md:mr-4 p-2 border-2 rounded-lg'
+                      type='number'
+                      value={price}
+                      placeholder='write a price'
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </div>
+                  <div className='md:w-[40%]'>
+                    <p className='w-full text-xs wb-1'>Quantity :</p>
+                    <input
+                      className='w-full md:mr-4 p-2 border-2 rounded-lg'
+                      type='number'
+                      value={quantity}
+                      placeholder='write quantity'
+                      onChange={(e) => setQuantity(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <p className='w-full text-xs wb-1'>Shipping Option :</p>
+                <Select
+                  className='w-20 border-2 rounded-lg'
                   variant={false}
                   placeholder='Select Shipping'
                   size='large'
@@ -167,10 +193,10 @@ const UpdateProducts = () => {
                 </Select>
               </div>
               <div>
-                <button onClick={handleUpdate}>Update Product</button>
+                <button className='py-2 px-3 rounded-lg border-2 bg-slate-500 text-slate-200' onClick={handleUpdate}>Update Product</button>
               </div>
               <div>
-                <button onClick={handleDelete}>Delete Product</button>
+                <button className='py-2 px-3 rounded-lg border-2 bg-slate-500 text-slate-200' onClick={handleDelete}>Delete Product</button>
               </div>
             </div>
           </div>
