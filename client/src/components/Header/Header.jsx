@@ -27,7 +27,9 @@ const Header = () => {
   return (
     <nav className="app__navbar w-full fixed top-0">
       <div className='flex py-2 px-3 w-full items-center justify-between z-[2] bg-slate-50 border-2'>
-        <h1 className='text-xl m-0'>ShopIt</h1>
+        <h1 className='text-xl m-0'>
+        <NavLink className={'text-black no-underline'} to="/" >ShopIt</NavLink>
+        </h1>
         <div className='flex flex-row items-center space-x-4 md:space-x-8'>
           <SearchInput />
           <div className='md:hidden'>
