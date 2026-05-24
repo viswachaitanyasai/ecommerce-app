@@ -86,10 +86,6 @@ const Homepage = () => {
     setChecked(all);
   }
 
-  useEffect(() => {
-    if (!checked.length || radio.length) getAllProducts();
-  }, [checked.length, radio.length])
-
   const filterProducts = async () => {
     try {
       const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/product-filters`, { checked, radio });
@@ -107,7 +103,11 @@ const Homepage = () => {
   }
 
   useEffect(() => {
-    if (checked.length || radio.length) filterProducts();
+    if (checked.length || radio.length) {
+      filterProducts();
+    } else {
+      getAllProducts();
+    }
   }, [checked, radio])
   return (
     <Layout>

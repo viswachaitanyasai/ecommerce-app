@@ -47,12 +47,14 @@ const AdminOrders = () => {
                 <div className='pb-4 border-2 rounded-3xl'>
                     <table>
                         <thead>
-                            <th className='p-3 md:p-4 text-xs md:text-base'>#</th>
-                            <th className='p-3 md:p-4 text-xs md:text-base'>Status</th>
-                            <th className='p-3 md:p-4 text-xs md:text-base'>Buyer</th>
-                            <th className='p-3 md:p-4 text-xs md:text-base hidden md:block'>Orders</th>
-                            <th className='p-3 md:p-4 text-xs md:text-base'>Payment</th>
-                            <th className='p-3 md:p-4 text-xs md:text-base'>Quantity</th>
+                            <tr>
+                                <th className='p-3 md:p-4 text-xs md:text-base'>#</th>
+                                <th className='p-3 md:p-4 text-xs md:text-base'>Status</th>
+                                <th className='p-3 md:p-4 text-xs md:text-base'>Buyer</th>
+                                <th className='p-3 md:p-4 text-xs md:text-base hidden md:block'>Orders</th>
+                                <th className='p-3 md:p-4 text-xs md:text-base'>Payment</th>
+                                <th className='p-3 md:p-4 text-xs md:text-base'>Quantity</th>
+                            </tr>
                         </thead>
                         <tbody>
                             {orders.map((o, i) => {

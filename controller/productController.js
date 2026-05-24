@@ -21,17 +21,17 @@ export const createProductController = async (req, res) => {
         const { photo } = req.files;
         switch (true) {
             case !name:
-                res.status(500).send({ error: "name is required" });
+                return res.status(500).send({ error: "name is required" });
             case !price:
-                res.status(500).send({ error: "price is required" });
+                return res.status(500).send({ error: "price is required" });
             case !description:
-                res.status(500).send({ error: "description is required" });
+                return res.status(500).send({ error: "description is required" });
             case !category:
-                res.status(500).send({ error: "category is required" });
+                return res.status(500).send({ error: "category is required" });
             case !quantity:
-                res.status(500).send({ error: "quantity is required" });
+                return res.status(500).send({ error: "quantity is required" });
             case photo && photo.size > 1000000:
-                res.status(500).send({ error: "photo is required and should be less than 1mb" });
+                return res.status(500).send({ error: "photo is required and should be less than 1mb" });
         }
 
         const products = new productModel({ ...req.fields, slug: slugify(name) })
@@ -95,7 +95,13 @@ export const getSingleProductController = async (req, res) => {
 export const productPhotoController = async (req, res) => {
     try {
         const product = await productModel.findById(req.params.pid).select("photo");
-        if (product.photo.data) {
+        if (!product) {
+            return res.status(404).send({
+                success: false,
+                message: "Product not found"
+            });
+        }
+        if (product.photo && product.photo.data) {
             res.set("Content-type", product.photo.contentType)
             return res.status(200).send(product.photo.data)
         }
@@ -111,7 +117,7 @@ export const productPhotoController = async (req, res) => {
 
 export const deleteProductController = async (req, res) => {
     try {
-        await productModel.findByIdAndDelete(req.params.pid).select("-photo")
+        await productModel.findByIdAndDelete(req.params.pid)
         res.status(200).send({
             success: true,
             message: "Product deleted Successfully"
@@ -132,17 +138,17 @@ export const updateProductController = async (req, res) => {
         const { photo } = req.files;
         switch (true) {
             case !name:
-                res.status(500).send({ error: "name is required" });
+                return res.status(500).send({ error: "name is required" });
             case !price:
-                res.status(500).send({ error: "price is required" });
+                return res.status(500).send({ error: "price is required" });
             case !description:
-                res.status(500).send({ error: "description is required" });
+                return res.status(500).send({ error: "description is required" });
             case !category:
-                res.status(500).send({ error: "category is required" });
+                return res.status(500).send({ error: "category is required" });
             case !quantity:
-                res.status(500).send({ error: "quantity is required" });
+                return res.status(500).send({ error: "quantity is required" });
             case photo && photo.size > 1000000:
-                res.status(500).send({ error: "photo is required and should be less than 1mb" });
+                return res.status(500).send({ error: "photo is required and should be less than 1mb" });
         }
 
         const products = await productModel.findByIdAndUpdate(req.params.pid,
@@ -191,7 +197,7 @@ export const productFilterController = async (req, res) => {
 
 export const productCountController = async (req, res) => {
     try {
-        const total = await productModel.find({}).estimatedDocumentCount();
+        const total = await productModel.estimatedDocumentCount();
         res.status(200).send({
             success: true,
             total
@@ -274,7 +280,7 @@ export const productCategoryController = async (req, res) => {
         const category = await categoryModel.findOne({ slug: req.params.slug });
         const products = await productModel.find({ category }).populate("category");
         res.status(200).send({
-            success: false,
+            success: true,
             category,
             products
         })
@@ -290,25 +296,17 @@ export const productCategoryController = async (req, res) => {
 
 export const braintreeTokenController = async (req, res) => {
     try {
-        gateway.clientToken.generate({}).then((response) => {
-            res.status(200).send(response);
-        }).catch((err) => {
-            res.status(500).send(err);
-        })
+        const response = await new Promise((resolve, reject) => {
+            gateway.clientToken.generate({}, (err, response) => {
+                if (err) reject(err);
+                else resolve(response);
+            });
+        });
+        res.status(200).send(response);
     } catch (error) {
         console.log(error);
+        res.status(500).send(error);
     }
-    // try {
-    //     gateway.clientToken.generate({}, function (err, response) {
-    //         if (err) {
-    //             res.status(500).send(err)
-    //         } else {
-    //             res.send(response);
-    //         }
-    //     })
-    // } catch (error) {
-    //     console.log(error);
-    // }
 }
 
 export const braintreePaymentController = async (req, res) => {
@@ -323,13 +321,13 @@ export const braintreePaymentController = async (req, res) => {
                 submitForSettlement: true
             }
         },
-            function (error, result) {
+            async function (error, result) {
                 if (result) {
-                    const order = new orderModel({
+                    await new orderModel({
                         products: cart,
                         payment: result,
                         buyer: req.user._id
-                    }).save()
+                    }).save();
                     res.json({ ok: true })
                 } else {
                     res.status(500).send(error);

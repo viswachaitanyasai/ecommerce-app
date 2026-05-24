@@ -16,17 +16,17 @@ function App() {
         <Route path="/category/:slug" element={<CategoryProduct />} />
         <Route path="/search" element={<Search />} />
 
-        <Route path="/dashboard" element={<PrivateRoute />}>
-          <Route path="user/profile" element={<Profile />} />
-          <Route path="user/orders" element={<Orders />} />
+        <Route path="/dashboard/user" element={<PrivateRoute />}>
+          <Route path="profile" element={<Profile />} />
+          <Route path="orders" element={<Orders />} />
         </Route>
 
-        <Route path="/dashboard" element={<AdminRoute />}>
-          <Route path="admin/create-category" element={<CreateCategory />} />
-          <Route path="admin/create-product" element={<CreateProduct />} />
-          <Route path="admin/products/:slug" element={<UpdateProducts />} />
-          <Route path="admin/products" element={<Products />} />
-          <Route path="admin/orders" element={<AdminOrders />} />
+        <Route path="/dashboard/admin" element={<AdminRoute />}>
+          <Route path="create-category" element={<CreateCategory />} />
+          <Route path="create-product" element={<CreateProduct />} />
+          <Route path="products/:slug" element={<UpdateProducts />} />
+          <Route path="products" element={<Products />} />
+          <Route path="orders" element={<AdminOrders />} />
         </Route>
 
         <Route path="/register" element={<Register />} />

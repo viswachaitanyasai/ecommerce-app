@@ -6,9 +6,9 @@ import { useCart } from '../../context/cart';
 import toast from 'react-hot-toast';
 
 const Search = () => {
-    const [values, useValues] = useSearch();
+    const [values, setValues] = useSearch();
     const [cart, setCart] = useCart();
-    const { navigate } = useNavigate();
+    const navigate = useNavigate();
 
     const goTop = () => {
         window.scrollTo({

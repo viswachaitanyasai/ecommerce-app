@@ -9,7 +9,7 @@ const CategoryProduct = () => {
     const params = useParams();
     const navigate = useNavigate();
     const [products, setProduct] = useState([]);
-    const [category, setCategory] = useState([]);
+    const [category, setCategory] = useState({});
     const [cart, setCart] = useCart();
 
     useEffect(() => {

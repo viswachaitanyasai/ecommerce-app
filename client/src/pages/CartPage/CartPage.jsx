@@ -88,7 +88,7 @@ const CartPage = () => {
                                 </div>
                                 <div className='flex flex-col w-2/3 justify-evenly'>
                                     <p className='text-sm p-1 m-0'>{p.name}</p>
-                                    <p cla className='text-sm font-medium p-1 m-0'>Price :{p.price}</p>
+                                    <p className='text-sm font-medium p-1 m-0'>Price :{p.price}</p>
                                     <button className='w-6 ml-6' onClick={() => removeCartItem(p._id)}><img src='./images/delete.png' /></button>
                                 </div>
                             </div>

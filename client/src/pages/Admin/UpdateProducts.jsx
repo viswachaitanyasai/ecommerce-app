@@ -66,12 +66,12 @@ const UpdateProducts = () => {
       productData.append("quantity", quantity);
       photo && productData.append("photo", photo);
       productData.append("category", category);
-      const data = axios.put(`${process.env.REACT_APP_API}/api/v1/product/update-product/${id}`, productData)
+      const { data } = await axios.put(`${process.env.REACT_APP_API}/api/v1/product/update-product/${id}`, productData)
       if (data?.success) {
-        toast.error(data?.message);
-      } else {
         toast.success("Product updated Successfully");
         navigate("/dashboard/admin/products");
+      } else {
+        toast.error(data?.message);
       }
     } catch (error) {
       console.log(error);
@@ -121,7 +121,7 @@ const UpdateProducts = () => {
                 <p className='text-xs wb-1'>Category :</p>
                 <Select
                   className='w-40 border-2 rounded-lg'
-                  variant={false}
+                  bordered={false}
                   placeholder="Select a Category"
                   size='large'
                   showSearch
@@ -181,7 +181,7 @@ const UpdateProducts = () => {
                 <p className='w-full text-xs wb-1'>Shipping Option :</p>
                 <Select
                   className='w-20 border-2 rounded-lg'
-                  variant={false}
+                  bordered={false}
                   placeholder='Select Shipping'
                   size='large'
                   showSearch

@@ -98,8 +98,8 @@ const ProductDetails = () => {
                 <button
                   className='py-2 px-4 w-full rounded-lg border-2 bg-slate-500 text-slate-200'
                   onClick={() => {
-                    setCart([...cart, product]);
-                    localStorage.setItem('cart', JSON.stringify([...cart, product]));
+                    setCart([...cart, p]);
+                    localStorage.setItem('cart', JSON.stringify([...cart, p]));
                     toast.success("Item Added to Cart");
                   }}>
                   Add to cart

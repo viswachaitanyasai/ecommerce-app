@@ -40,10 +40,13 @@ export const registerController = async (req, res) => {
 
         const user = await new userModel({ name, email, phone, address, password: hashedPassword, answer }).save();
 
+        // Strip password from response
+        const { password: _, ...safeUser } = user.toObject();
+
         res.status(201).send({
             success: true,
             message: "User Register Successful",
-            user
+            user: safeUser
         })
     } catch (error) {
         console.log(error);
@@ -93,7 +96,7 @@ export const loginController = async (req, res) => {
             message: "LogIn successfull",
             user: {
                 name: user.name,
-                email: user.name,
+                email: user.email,
                 phone: user.phone,
                 address: user.address,
                 role: user.role
@@ -115,18 +118,18 @@ export const forgotPasswordController = async (req, res) => {
     try {
         const { email, answer, newPassword } = req.body;
         if (!email) {
-            res.status(400).send({ message: "Email is required" });
+            return res.status(400).send({ message: "Email is required" });
         }
         if (!answer) {
-            res.status(400).send({ message: "Answer is required" });
+            return res.status(400).send({ message: "Answer is required" });
         }
         if (!newPassword) {
-            res.status(400).send({ message: " New Password is required" });
+            return res.status(400).send({ message: "New Password is required" });
         }
         //check in db
         const user = await userModel.findOne({ email, answer });
         if (!user) {
-            res.status(404).send({
+            return res.status(404).send({
                 success: false,
                 message: "Wrong Email or Answer"
             })
@@ -218,12 +221,12 @@ export const orderStatusController = async (req, res) => {
     try {
         const { orderId } = req.params;
         const { status } = req.body;
-        const orders = await orderModel.findByIdAndUpdate(
+        const order = await orderModel.findByIdAndUpdate(
             orderId,
             { status },
             { new: true }
         );
-        res.json(orders);
+        res.json(order);
     } catch (error) {
         console.log(error);
         res.status(500).send({

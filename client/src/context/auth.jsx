@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext, createContext, parse } from "react";
-import { token } from "morgan";
+import { useState, useEffect, useContext, createContext } from "react";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -11,8 +10,13 @@ const AuthProvider = ({ children }) => {
   });
 
   //default axios
-  axios.defaults.headers.common["Authorization"] = auth?.token;
-
+  useEffect(() => {
+    if (auth?.token) {
+      axios.defaults.headers.common["Authorization"] = auth.token;
+    } else {
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  }, [auth.token]);
 
   useEffect(() => {
     const data = localStorage.getItem("auth");
