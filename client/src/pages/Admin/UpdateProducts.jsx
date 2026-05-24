@@ -1,10 +1,26 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import toast from 'react-hot-toast'
-import { Select } from 'antd'
-import { useNavigate, useParams } from 'react-router-dom'
-import AdminDashboard from './AdminDashboard'
-const { Option } = Select;
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import AdminDashboard from "./AdminDashboard";
+import SelectInput from "../../components/ui/SelectInput";
+
+const notify = (msg) =>
+  toast.success(msg, {
+    style: { background: "#0a0a0c", color: "#ededef", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px" },
+    iconTheme: { primary: "#5E6AD2", secondary: "#ededef" },
+  });
+
+const notifyError = (msg) =>
+  toast.error(msg, {
+    style: { background: "#0a0a0c", color: "#ededef", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px" },
+    iconTheme: { primary: "#ef4444", secondary: "#ededef" },
+  });
+
+const SHIPPING_OPTIONS = [
+  { value: "0", label: "No" },
+  { value: "1", label: "Yes" },
+];
 
 const UpdateProducts = () => {
   const navigate = useNavigate();
@@ -21,36 +37,35 @@ const UpdateProducts = () => {
 
   const getSingleProduct = async () => {
     try {
-      const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`)
+      const { data } = await axios.get(
+        `${process.env.REACT_APP_API}/api/v1/product/get-product/${params.slug}`
+      );
       setName(data.product.name);
       setId(data.product._id);
       setDescription(data.product.description);
       setPrice(data.product.price);
       setQuantity(data.product.quantity);
-      setShipping(data.product.shipping);
+      setShipping(data.product.shipping?.toString());
       setCategory(data.product.category._id);
-      setName(data.product.name);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   useEffect(() => {
     getSingleProduct();
-    //eslint-disable-next-line
-  }, [])
+    // eslint-disable-next-line
+  }, []);
 
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(`${process.env.REACT_APP_API}/api/v1/category/get-category`);
-      if (data?.success) {
-        setCategories(data.category);
-      }
+      if (data?.success) setCategories(data.category);
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong")
+      notifyError("Something went wrong");
     }
-  }
+  };
 
   useEffect(() => {
     getAllCategory();
@@ -66,144 +81,180 @@ const UpdateProducts = () => {
       productData.append("quantity", quantity);
       photo && productData.append("photo", photo);
       productData.append("category", category);
-      const { data } = await axios.put(`${process.env.REACT_APP_API}/api/v1/product/update-product/${id}`, productData)
+      const { data } = await axios.put(
+        `${process.env.REACT_APP_API}/api/v1/product/update-product/${id}`,
+        productData
+      );
       if (data?.success) {
-        toast.success("Product updated Successfully");
+        notify("Product updated successfully");
         navigate("/dashboard/admin/products");
       } else {
-        toast.error(data?.message);
+        notifyError(data?.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong")
+      notifyError("Something went wrong");
     }
-  }
+  };
 
   const handleDelete = async () => {
     try {
-      let answer = window.prompt("Are you sure do you want to delete? (yes or no)")
+      let answer = window.prompt("Are you sure you want to delete this product? (type 'yes' to confirm)");
       if (!answer) return;
-      const { data } = await axios.delete(`${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`)
-      toast.success("Product Deleted Successfully");
+      await axios.delete(`${process.env.REACT_APP_API}/api/v1/product/delete-product/${id}`);
+      notify("Product deleted successfully");
       navigate("/dashboard/admin/products");
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      notifyError("Something went wrong");
     }
-  }
+  };
+
+  const categoryOptions = categories.map((c) => ({ value: c._id, label: c.name }));
 
   return (
-    <>
-      <AdminDashboard>
-        <div className='app__admin-dashboard py-6'>
-          <div className='flex flex-col items-center'>
-            <h1>Update Product</h1>
-            <div className='w-[90%] flex flex-col items-center space-y-4 md:w-[50%]'>
-              <div className='my-4'>
-                {photo ? (
-                  <div className='w-40'>
-                    <img src={URL.createObjectURL(photo)} alt='product photo' height={"200px"} />
-                  </div>
-                ) : (
-                  <div className='w-40'>
-                    <img src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`} alt='product photo' height={"200px"} />
-                  </div>
-                )
-                }
-              </div>
-              <div>
-                <label className='py-1 px-2 rounded-lg border-2 bg-slate-500 text-slate-200'>
-                  Upload Photo
-                  <input type='file' name='photo' accept='image/*' onChange={(e) => setPhoto(e.target.files[0])} hidden />
-                </label>
-              </div>
-              <div className='w-full'>
-                <p className='text-xs wb-1'>Category :</p>
-                <Select
-                  className='w-40 border-2 rounded-lg'
-                  bordered={false}
-                  placeholder="Select a Category"
-                  size='large'
-                  showSearch
-                  onChange={(value) => { setCategory(value) }}
-                  value={category}
-                >
-                  {categories?.map(c => (
-                    <Option key={c._id} value={c._id}>{c.name}</Option>
-                  ))}
-                </Select>
-              </div>
-              <div className='w-full'>
-                <div className='mb-3 flex flex-col md:flex-row md:justify-between'>
-                  <div className='md:w-[40%]'>
-                    <p className='text-xs wb-1'>Name :</p>
-                    <input
-                      className='w-full mb-3 md:mr-4 p-2 border-2 rounded-lg'
-                      type='text'
-                      value={name}
-                      placeholder='write a name'
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                  </div>
-                  <div className='md:w-[40%]'>
-                    <p className='text-xs wb-1'>Description :</p>
-                    <input
-                      className='w-full md:mr-4 p-2 border-2 rounded-lg'
-                      type='text'
-                      value={description}
-                      placeholder='write a description'
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className='my-3 flex flex-col md:justify-between md:flex-row'>
-                  <div className='md:w-[40%]'>
-                    <p className='w-full text-xs wb-1'>Price :</p>
-                    <input
-                      className='w-full mb-3 md:mr-4 p-2 border-2 rounded-lg'
-                      type='number'
-                      value={price}
-                      placeholder='write a price'
-                      onChange={(e) => setPrice(e.target.value)}
-                    />
-                  </div>
-                  <div className='md:w-[40%]'>
-                    <p className='w-full text-xs wb-1'>Quantity :</p>
-                    <input
-                      className='w-full md:mr-4 p-2 border-2 rounded-lg'
-                      type='number'
-                      value={quantity}
-                      placeholder='write quantity'
-                      onChange={(e) => setQuantity(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <p className='w-full text-xs wb-1'>Shipping Option :</p>
-                <Select
-                  className='w-20 border-2 rounded-lg'
-                  bordered={false}
-                  placeholder='Select Shipping'
-                  size='large'
-                  showSearch
-                  onChange={(value) => setShipping(value)}
-                  value={shipping ? "Yes" : 'No'}
-                >
-                  <Option value="0">No</Option>
-                  <Option value="1">Yes</Option>
-                </Select>
-              </div>
-              <div>
-                <button className='py-2 px-3 rounded-lg border-2 bg-slate-500 text-slate-200' onClick={handleUpdate}>Update Product</button>
-              </div>
-              <div>
-                <button className='py-2 px-3 rounded-lg border-2 bg-slate-500 text-slate-200' onClick={handleDelete}>Delete Product</button>
-              </div>
+    <AdminDashboard>
+      <div className="mx-auto max-w-lg">
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <span className="label">Admin</span>
+          <h2 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+            Update Product
+          </h2>
+          <p className="mt-2 text-sm" style={{ color: "var(--foreground-muted)" }}>
+            Edit product details
+          </p>
+        </div>
+
+        {/* Form */}
+        <form
+          onSubmit={handleUpdate}
+          className="space-y-5 rounded-2xl p-6 md:p-8"
+          style={{
+            background: "linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+            border: "1px solid var(--border-default)",
+            boxShadow: "0 0 0 1px rgba(255,255,255,0.06), 0 2px 20px rgba(0,0,0,0.4)",
+          }}
+        >
+          {/* Photo */}
+          <div className="flex flex-col items-center">
+            <div className="mb-3 overflow-hidden rounded-xl">
+              {photo ? (
+                <img src={URL.createObjectURL(photo)} alt="product preview" className="h-40 w-full object-cover" />
+              ) : (
+                <img
+                  src={`${process.env.REACT_APP_API}/api/v1/product/product-photo/${id}`}
+                  alt="current product"
+                  className="h-40 w-full object-cover"
+                />
+              )}
+            </div>
+            <label
+              className="inline-flex cursor-pointer items-center gap-2 rounded-xl px-4 py-3 text-sm font-medium transition-all duration-200 hover:opacity-80"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid var(--border-default)",
+                color: "var(--foreground)",
+              }}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              {photo ? "Change Photo" : "Upload Photo"}
+              <input type="file" name="photo" accept="image/*" onChange={(e) => setPhoto(e.target.files[0])} hidden />
+            </label>
+          </div>
+
+          {/* Category select */}
+          <SelectInput value={category} onChange={setCategory} placeholder="Select a category" options={categoryOptions} />
+
+          {/* Text inputs */}
+          <div className="space-y-4">
+            <input
+              type="text"
+              placeholder="Product name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="h-12 w-full rounded-xl px-4 text-sm transition-all duration-200 placeholder:text-sm focus:outline-none"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid var(--border-default)",
+                color: "var(--foreground)",
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="h-12 w-full rounded-xl px-4 text-sm transition-all duration-200 placeholder:text-sm focus:outline-none"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid var(--border-default)",
+                color: "var(--foreground)",
+              }}
+            />
+            <div className="flex gap-4">
+              <input
+                type="number"
+                placeholder="Price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="h-12 w-full rounded-xl px-4 text-sm transition-all duration-200 placeholder:text-sm focus:outline-none"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid var(--border-default)",
+                  color: "var(--foreground)",
+                }}
+              />
+              <input
+                type="number"
+                placeholder="Quantity"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                className="h-12 w-full rounded-xl px-4 text-sm transition-all duration-200 placeholder:text-sm focus:outline-none"
+                style={{
+                  background: "rgba(255,255,255,0.06)",
+                  border: "1px solid var(--border-default)",
+                  color: "var(--foreground)",
+                }}
+              />
             </div>
           </div>
-        </div>
-      </AdminDashboard>
-    </>
-  )
-}
 
-export default UpdateProducts
+          {/* Shipping select */}
+          <SelectInput value={shipping} onChange={setShipping} placeholder="Select shipping" options={SHIPPING_OPTIONS} />
+
+          {/* Actions */}
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="flex-1 rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
+              style={{
+                background: "var(--accent)",
+                color: "#fff",
+                boxShadow: "0 0 0 1px rgba(94,106,210,0.5), inset 0 1px 0 0 rgba(255,255,255,0.2)",
+              }}
+            >
+              Update Product
+            </button>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
+              style={{
+                background: "rgba(239,68,68,0.15)",
+                color: "#ef4444",
+                border: "1px solid rgba(239,68,68,0.3)",
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        </form>
+      </div>
+    </AdminDashboard>
+  );
+};
+
+export default UpdateProducts;

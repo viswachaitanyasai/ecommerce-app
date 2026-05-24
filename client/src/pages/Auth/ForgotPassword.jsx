@@ -1,77 +1,154 @@
 import React, { useState } from "react";
-import Layout from '../../components/Layouts/Layout'
+import { useNavigate, Link } from "react-router-dom";
+import Layout from "../../components/Layouts/Layout";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
-// import "./ForgotPassword.scss"
+
+const notify = (msg) =>
+  toast.success(msg, {
+    style: { background: "#0a0a0c", color: "#ededef", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px" },
+    iconTheme: { primary: "#5E6AD2", secondary: "#ededef" },
+  });
+
+const notifyError = (msg) =>
+  toast.error(msg, {
+    style: { background: "#0a0a0c", color: "#ededef", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px" },
+    iconTheme: { primary: "#ef4444", secondary: "#ededef" },
+  });
 
 const ForgotPassword = () => {
-    const [email, setEmail] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [answer, setAnswer] = useState("");
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [answer, setAnswer] = useState("");
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-
-    // form function
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const res = await axios.post(`${process.env.REACT_APP_API}/api/v1/auth/forgot-password`, {
-                email,
-                newPassword,
-                answer,
-            });
-            if (res && res.data.success) {
-                toast.success(res.data && res.data.message);
-                navigate("/login");
-            } else {
-                toast.error(res.data.message);
-            }
-        } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong");
-        }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_API}/api/v1/auth/forgot-password`, {
+        email,
+        newPassword,
+        answer,
+      });
+      if (res && res.data.success) {
+        notify(res.data.message);
+        navigate("/login");
+      } else {
+        notifyError(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      notifyError("Something went wrong");
     }
-    return (
-        <Layout>
-            <div className='app__fp flex flex-row'>
-                <div className="hidden md:block md:w-1/2">Photo Here</div>
-                <div className='app__fp-form-box w-full flex flex-col items-center md:w-1/2'>
-                    <h1 className="mt-12 mb-6 text-4xl">Forgot Password ?</h1>
-                    <p className="text-xs mb-12">We got you</p>
-                    <form onSubmit={handleSubmit} className='app__fp-form w-2/3 flex flex-col items-center space-y-5'>
-                        <input
-                            className='p-2 w-4/5 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                            value={email}
-                            type='email'
-                            placeholder='email'
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                        <input
-                            className='p-2 w-4/5 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                            value={answer}
-                            type='text'
-                            placeholder='answer'
-                            onChange={(e) => setAnswer(e.target.value)}
-                            required
-                        />
-                        <input
-                            className='p-2 w-4/5 placeholder:text-sm rounded-lg border-2 border-gray-300'
-                            value={newPassword}
-                            type='password'
-                            placeholder='new password'
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            required
-                        />
-                        <div className="button_box">
-                            <button className="py-2 px-3 m-4 rounded-lg border-2 bg-slate-500 text-slate-200" type='submit'>Reset</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </Layout>
-    )
-}
+  };
 
-export default ForgotPassword
+  return (
+    <Layout>
+      <section className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4 pt-28 pb-16 md:pt-32 md:pb-24">
+        <div className="w-full max-w-md">
+          {/* Header */}
+          <div className="mb-8 text-center">
+            <span className="label">Auth</span>
+            <h2 className="mt-2 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
+              Forgot Password?
+            </h2>
+            <p className="mt-2 text-sm" style={{ color: "var(--foreground-muted)" }}>
+              We've got you covered
+            </p>
+          </div>
+
+          {/* Form */}
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-5 rounded-2xl p-6 md:p-8"
+            style={{
+              background: "linear-gradient(to bottom, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+              border: "1px solid var(--border-default)",
+              boxShadow: "0 0 0 1px rgba(255,255,255,0.06), 0 2px 20px rgba(0,0,0,0.4)",
+            }}
+          >
+            <div className="space-y-4">
+              <div>
+                <p className="mb-1.5 text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>Email</p>
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="h-12 w-full rounded-xl px-4 text-sm transition-all duration-200 placeholder:text-sm focus:outline-none"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid var(--border-default)",
+                    color: "var(--foreground)",
+                  }}
+                />
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>Security Answer</p>
+                <input
+                  type="text"
+                  placeholder="Your security answer"
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  required
+                  className="h-12 w-full rounded-xl px-4 text-sm transition-all duration-200 placeholder:text-sm focus:outline-none"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid var(--border-default)",
+                    color: "var(--foreground)",
+                  }}
+                />
+              </div>
+              <div>
+                <p className="mb-1.5 text-xs font-medium" style={{ color: "var(--foreground-muted)" }}>New Password</p>
+                <input
+                  type="password"
+                  placeholder="Enter new password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                  className="h-12 w-full rounded-xl px-4 text-sm transition-all duration-200 placeholder:text-sm focus:outline-none"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid var(--border-default)",
+                    color: "var(--foreground)",
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              className="w-full rounded-xl px-5 py-3 text-sm font-medium transition-all duration-200 hover:opacity-90 active:scale-[0.97]"
+              style={{
+                background: "var(--accent)",
+                color: "#fff",
+                boxShadow: "0 0 0 1px rgba(94,106,210,0.5), inset 0 1px 0 0 rgba(255,255,255,0.2)",
+              }}
+            >
+              Reset Password
+            </button>
+
+            {/* Back to login */}
+            <div className="flex items-center justify-center gap-1 pt-2">
+              <p className="text-sm" style={{ color: "var(--foreground-muted)" }}>
+                Remember your password?
+              </p>
+              <Link
+                to="/login"
+                className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+                style={{ color: "var(--accent)" }}
+              >
+                Sign In
+              </Link>
+            </div>
+          </form>
+        </div>
+      </section>
+    </Layout>
+  );
+};
+
+export default ForgotPassword;

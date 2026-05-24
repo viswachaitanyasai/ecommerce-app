@@ -1,26 +1,47 @@
-import React from 'react'
-// import "./Footer.scss"
-import { Link } from "react-router-dom"
+import React from "react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div className='app__footer py-4 px-8 bg-slate-200 flex flex-col md:flex-row md:justify-between items-center'>
-      <div className='app__footer-copyright m-2'>
-        <h4 className='text-xs md:text-sm'>All Rights reserved &copy;viswa</h4>
-      </div>
-      <div className="app__footer-links flex flex-row space-x-5">
-        <div>
-          <Link className='text-sm font-medium no-underline text-black' to="/about" >About</Link>
-        </div>
-        <div>
-          <Link className='text-sm font-medium no-underline text-black' to="/contact" >Contact</Link>
-        </div>
-        <div>
-          <Link className='text-sm font-medium no-underline text-black' to="/policy" >Privacy Policy</Link>
-        </div>
-      </div>
-    </div>
-  )
-}
+    <footer
+      style={{
+        borderTop: "1px solid var(--border-default)",
+        background: "var(--background-elevated)",
+      }}
+    >
+      <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 py-8 md:flex-row md:px-8">
+        {/* Copyright */}
+        <p className="text-sm" style={{ color: "var(--foreground-muted)" }}>
+          &copy; {new Date().getFullYear()} ShopIt. All rights reserved.
+        </p>
 
-export default Footer
+        {/* Links */}
+        <div className="flex items-center gap-6">
+          <Link
+            to="/about"
+            className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+            style={{ color: "var(--foreground-subtle)" }}
+          >
+            About
+          </Link>
+          <Link
+            to="/contact"
+            className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+            style={{ color: "var(--foreground-subtle)" }}
+          >
+            Contact
+          </Link>
+          <Link
+            to="/policy"
+            className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+            style={{ color: "var(--foreground-subtle)" }}
+          >
+            Privacy Policy
+          </Link>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

@@ -1,150 +1,315 @@
-import React, { useState } from 'react'
-// import "./Header.scss"
-import { NavLink } from "react-router-dom"
-import { useAuth } from '../../context/auth'
-import toast from 'react-hot-toast'
-import SearchInput from '../Form/SearchInput'
-import useCategory from '../../hooks/useCategory'
-import NavDropdown from 'react-bootstrap/NavDropdown';
-import { Link } from 'react-router-dom'
-import { useCart } from '../../context/cart'
-import { Badge } from "antd";
+import React, { useState, useRef, useEffect } from "react";
+import { NavLink, Link } from "react-router-dom";
+import { useAuth } from "../../context/auth";
+import toast from "react-hot-toast";
+import SearchInput from "../Form/SearchInput";
+import useCategory from "../../hooks/useCategory";
+import { useCart } from "../../context/cart";
 
+/* ==========================================
+   Linear-style Header
+   ========================================== */
 const Header = () => {
   const [auth, setAuth] = useAuth();
-  const [cart, setCart] = useCart();
+  const [cart] = useCart();
   const [isOpen, setIsOpen] = useState(false);
+  const [catOpen, setCatOpen] = useState(false);
   const categories = useCategory();
+  const catRef = useRef(null);
+
+  // Close category dropdown on outside click
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (catRef.current && !catRef.current.contains(e.target)) setCatOpen(false);
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
   const handleLogOut = () => {
-    setAuth({
-      ...auth,
-      user: null,
-      token: ""
-    })
+    setAuth({ ...auth, user: null, token: "" });
     localStorage.removeItem("auth");
-    toast.success("Log Out Successfully");
-  }
+    toast.success("Logged out", {
+      style: { background: "#0a0a0c", color: "#ededef", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "12px" },
+      iconTheme: { primary: "#5E6AD2", secondary: "#ededef" },
+    });
+  };
+
+  const closeMobile = () => setIsOpen(false);
+
   return (
-    <nav className="app__navbar w-full fixed top-0">
-      <div className='flex py-2 px-3 w-full items-center justify-between z-[2] bg-slate-50 border-2'>
-        <h1 className='text-xl m-0'>
-        <NavLink className={'text-black no-underline'} to="/" >ShopIt</NavLink>
-        </h1>
-        <div className='flex flex-row items-center space-x-4 md:space-x-8'>
-          <SearchInput />
-          <div className='md:hidden'>
-            <button className="relative group" onClick={() => { setIsOpen(!isOpen) }}>
-              <div className="relative flex overflow-hidden items-center justify-center rounded-full w-[50px] h-[50px] transform transition-all bg-slate-700 ring-0 ring-gray-300 hover:ring-8 group-focus:ring-4 ring-opacity-30 duration-200 shadow-md">
-                <div className="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden">
-                  <div className={`bg-white h-[2px] w-7 transform transition-all duration-300 origin-left ${isOpen ? 'translate-x-10' : ''}`}></div>
-                  <div className={`bg-white h-[2px] w-7 rounded transform transition-all duration-300 ${isOpen ? 'translate-x-10' : ''} delay-75`}></div>
-                  <div className={`bg-white h-[2px] w-7 transform transition-all duration-300 origin-left ${isOpen ? 'translate-x-10' : ''} delay-150`}></div>
+    <>
+      <header
+        className="fixed left-0 top-0 z-50 w-full"
+        style={{
+          background: "rgba(5,5,6,0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          borderBottom: "1px solid var(--border-default)",
+        }}
+      >
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
+          {/* Brand */}
+          <NavLink to="/" className="flex items-center gap-2.5 no-underline" onClick={closeMobile}>
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-lg"
+              style={{ background: "var(--accent)" }}
+            >
+              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+            <span className="text-base font-semibold" style={{ color: "var(--foreground)" }}>
+              ShopIt
+            </span>
+          </NavLink>
 
-                  <div className={`absolute items-center justify-between transform transition-all duration-500 top-2.5 -translate-x-10 flex w-0 ${isOpen ? 'translate-x-0' : ''}`}>
-                    <div className={`absolute bg-white h-[2px] w-5 transform transition-all duration-500 rotate-0 delay-300 ${isOpen ? 'rotate-45' : ''}`}></div>
-                    <div className={`absolute bg-white h-[2px] w-5 transform transition-all duration-500 -rotate-0 delay-300 ${isOpen ? '-rotate-45' : ''} `}></div>
-                  </div>
-                </div>
-              </div>
-            </button>
-          </div>
-          <div className='hidden md:block'>
-            <div className='flex flex-row px-2 space-x-10'>
-              <div>
-                <NavLink className={'text-black no-underline'} to="/" >home</NavLink>
-              </div>
+          {/* Desktop nav */}
+          <nav className="hidden items-center gap-6 md:flex">
+            <SearchInput />
 
-              <NavDropdown title="Category" id="basic-nav-dropdown" className='app__header-dropdown'>
-                {categories?.map((c) => (
-                  <NavDropdown.Item><Link className={'text-black no-underline'} to={`/category/${c.slug}`} style={{ textDecoration: "none", color: "black" }}>{c.name}</Link></NavDropdown.Item>
-                ))}
-              </NavDropdown>
+            <NavLink
+              to="/"
+              end
+              className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+              style={({ isActive }) => ({
+                color: isActive ? "var(--accent)" : "var(--foreground-subtle)",
+              })}
+            >
+              Home
+            </NavLink>
 
-              {!auth.user ? (<>
-                <div>
-                  <NavLink className={'text-black no-underline'} to="/register" >Register</NavLink>
+            {/* Categories dropdown */}
+            <div ref={catRef} className="relative">
+              <button
+                onClick={() => setCatOpen(!catOpen)}
+                className="flex items-center gap-1 text-sm font-medium transition-all duration-200 hover:opacity-80"
+                style={{ color: "var(--foreground-subtle)" }}
+              >
+                Categories
+                <svg
+                  className={`h-3 w-3 transition-transform duration-200 ${catOpen ? "rotate-180" : ""}`}
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              {catOpen && (
+                <div
+                  className="absolute right-0 top-full z-20 mt-2 w-48 overflow-hidden rounded-xl p-1.5 shadow-xl backdrop-blur-xl"
+                  style={{
+                    background: "rgba(10,10,12,0.95)",
+                    border: "1px solid var(--border-default)",
+                    boxShadow: "0 0 0 1px rgba(255,255,255,0.06), 0 8px 40px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  {categories?.length > 0 ? (
+                    categories.map((c) => (
+                      <Link
+                        key={c._id}
+                        to={`/category/${c.slug}`}
+                        className="block rounded-lg px-3 py-2 text-sm no-underline transition-all duration-200 hover:bg-white/[0.06]"
+                        style={{ color: "var(--foreground)" }}
+                        onClick={() => setCatOpen(false)}
+                      >
+                        {c.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <p className="px-3 py-2 text-sm" style={{ color: "var(--foreground-muted)" }}>
+                      No categories
+                    </p>
+                  )}
                 </div>
-                <div>
-                  <NavLink className={'text-black no-underline'} to="/login" >Log In</NavLink>
-                </div>
-              </>) : (<>
-                <div>
-                  <NavLink className={'text-black no-underline'} to={`/dashboard/${auth?.user?.role === 1 ? "admin/create-category" : "user/profile"}`} >Dashboard</NavLink>
-                </div>
-                <div>
-                  <NavLink className={'text-black no-underline'} onClick={handleLogOut} to="/login" >Log Out</NavLink>
-                </div>
-              </>)}
-              <div>
-                <Badge count={cart?.length} showZero>
-                  <NavLink className={'text-black no-underline'} to="/cart" >Cart</NavLink>
-                </Badge>
-              </div>
+              )}
+            </div>
+
+            {/* Auth links */}
+            {!auth?.user ? (
+              <>
+                <NavLink
+                  to="/register"
+                  className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+                  style={({ isActive }) => ({
+                    color: isActive ? "var(--accent)" : "var(--foreground-subtle)",
+                  })}
+                >
+                  Register
+                </NavLink>
+                <NavLink
+                  to="/login"
+                  className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+                  style={({ isActive }) => ({
+                    color: isActive ? "var(--accent)" : "var(--foreground-subtle)",
+                  })}
+                >
+                  Log In
+                </NavLink>
+              </>
+            ) : (
+              <>
+                <NavLink
+                  to={`/dashboard/${auth?.user?.role === 1 ? "admin/create-category" : "user/profile"}`}
+                  className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+                  style={({ isActive }) => ({
+                    color: isActive ? "var(--accent)" : "var(--foreground-subtle)",
+                  })}
+                >
+                  Dashboard
+                </NavLink>
+                <NavLink
+                  to="/login"
+                  onClick={handleLogOut}
+                  className="text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+                  style={{ color: "var(--foreground-subtle)" }}
+                >
+                  Log Out
+                </NavLink>
+              </>
+            )}
+
+            {/* Cart */}
+            <NavLink
+              to="/cart"
+              className="relative flex items-center gap-1 text-sm font-medium no-underline transition-all duration-200 hover:opacity-80"
+              style={({ isActive }) => ({
+                color: isActive ? "var(--accent)" : "var(--foreground-subtle)",
+              })}
+            >
+              Cart
+              {cart?.length > 0 && (
+                <span
+                  className="flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-[11px] font-semibold leading-none"
+                  style={{
+                    background: "var(--accent)",
+                    color: "#fff",
+                    boxShadow: "0 0 0 1px rgba(94,106,210,0.5), inset 0 1px 0 0 rgba(255,255,255,0.2)",
+                  }}
+                >
+                  {cart.length}
+                </span>
+              )}
+            </NavLink>
+          </nav>
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="relative flex h-9 w-9 items-center justify-center rounded-xl md:hidden"
+            style={{ color: "var(--foreground)" }}
+            aria-label="Toggle menu"
+          >
+            <div className="relative flex h-4 w-5 flex-col justify-center gap-[5px]">
+              <span
+                className="block h-[2px] w-full rounded-full transition-all duration-300"
+                style={{
+                  background: "var(--foreground)",
+                  transform: isOpen ? "rotate(45deg) translate(2.5px, 2.5px)" : "none",
+                }}
+              />
+              <span
+                className="block h-[2px] w-full rounded-full transition-all duration-300"
+                style={{
+                  background: "var(--foreground)",
+                  opacity: isOpen ? 0 : 1,
+                }}
+              />
+              <span
+                className="block h-[2px] w-full rounded-full transition-all duration-300"
+                style={{
+                  background: "var(--foreground)",
+                  transform: isOpen ? "rotate(-45deg) translate(2.5px, -2.5px)" : "none",
+                }}
+              />
+            </div>
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile drawer */}
+      <>
+        {/* Backdrop */}
+        <div
+          className={`fixed inset-0 z-40 transition-opacity duration-300 md:hidden ${
+            isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+          }`}
+          style={{ background: "rgba(0,0,0,0.6)" }}
+          onClick={closeMobile}
+        />
+
+        {/* Drawer */}
+        <div
+          className={`fixed bottom-0 right-0 top-0 z-50 w-72 transform overflow-y-auto transition-transform duration-300 ease-out md:hidden`}
+          style={{
+            background: "rgba(10,10,12,0.98)",
+            borderLeft: "1px solid var(--border-default)",
+            backdropFilter: "blur(20px)",
+            WebkitBackdropFilter: "blur(20px)",
+            transform: isOpen ? "translateX(0)" : "translateX(100%)",
+          }}
+        >
+          <div className="flex flex-col gap-1 p-6 pt-20">
+            <SearchInput />
+
+            <div className="mt-4 flex flex-col gap-1">
+              <MobileLink to="/" onClick={closeMobile}>Home</MobileLink>
+
+              {categories?.map((c) => (
+                <MobileLink key={c._id} to={`/category/${c.slug}`} onClick={closeMobile}>
+                  {c.name}
+                </MobileLink>
+              ))}
+
+              <hr style={{ borderColor: "var(--border-default)", margin: "8px 0" }} />
+
+              {!auth?.user ? (
+                <>
+                  <MobileLink to="/register" onClick={closeMobile}>Register</MobileLink>
+                  <MobileLink to="/login" onClick={closeMobile}>Log In</MobileLink>
+                </>
+              ) : (
+                <>
+                  <MobileLink
+                    to={`/dashboard/${auth?.user?.role === 1 ? "admin/create-category" : "user/profile"}`}
+                    onClick={closeMobile}
+                  >
+                    Dashboard
+                  </MobileLink>
+                  <MobileLink to="/login" onClick={() => { handleLogOut(); closeMobile(); }}>
+                    Log Out
+                  </MobileLink>
+                </>
+              )}
+
+              <hr style={{ borderColor: "var(--border-default)", margin: "8px 0" }} />
+
+              <MobileLink to="/cart" onClick={closeMobile}>
+                Cart{cart?.length > 0 ? ` (${cart.length})` : ""}
+              </MobileLink>
             </div>
           </div>
         </div>
-      </div>
-      <div className={`absolute p-3 z-10 bg-slate-500 w-full flex flex-col items-center space-y-1 transition-all duration-300 ease-in-out ${isOpen ? 'right-0' : 'right-[-100%]'}`}>
-        <NavLink className={'no-underline text-black'} to="/" >home</NavLink>
-        {categories?.map((c, index) => (
-          <Link to={`/category/${c.slug}`} key={index} style={{ textDecoration: "none", color: "black" }}>{c.name}</Link>
-        ))}
-        {!auth.user ? (<>
-          <div>
-            <NavLink className={'no-underline text-black'} to="/register" >Register</NavLink>
-          </div>
-          <div>
-            <NavLink className={'no-underline text-black'} to="/login" >Log In</NavLink>
-          </div>
-        </>) : (<>
-          <div>
-            <NavLink className={'no-underline text-black'} to={`/dashboard/${auth?.user?.role === 1 ? "admin/create-category" : "user/profile"}`} >Dashboard</NavLink>
-          </div>
-          <div>
-            <NavLink className={'no-underline text-black'} onClick={handleLogOut} to="/login" >Log Out</NavLink>
-          </div>
-        </>)}
-        <div>
-          <Badge count={cart?.length} showZero>
-            <NavLink className={'no-underline text-black'} to="/cart" >Cart</NavLink>
-          </Badge>
-        </div>
-      </div>
-      {/* <ul className="app__navbar-links">
-        <SearchInput />
-        <li>
-          <NavLink to="/home" >home</NavLink>
-        </li>
+      </>
+    </>
+  );
+};
 
-        <NavDropdown title="Category" id="basic-nav-dropdown" className='app__header-dropdown'>
-          <NavDropdown.Item><Link style={{ textDecoration: "none", color: "black" }} to={`/categories`}>All categories</Link></NavDropdown.Item>
-          {categories?.map((c) => (
-            <NavDropdown.Item><Link to={`/category/${c.slug}`} style={{ textDecoration: "none", color: "black" }}>{c.name}</Link></NavDropdown.Item>
-          ))}
-        </NavDropdown>
+/* Small helper for mobile drawer links */
+const MobileLink = ({ to, onClick, children }) => (
+  <NavLink
+    to={to}
+    onClick={onClick}
+    className="rounded-lg px-3 py-2.5 text-sm font-medium no-underline transition-all duration-200 hover:bg-white/[0.06]"
+    style={({ isActive }) => ({
+      color: isActive ? "var(--accent)" : "var(--foreground)",
+      background: isActive ? "rgba(94,106,210,0.1)" : "transparent",
+    })}
+  >
+    {children}
+  </NavLink>
+);
 
-        {!auth.user ? (<>
-          <li>
-            <NavLink to="/register" >Register</NavLink>
-          </li>
-          <li>
-            <NavLink to="/login" >Log In</NavLink>
-          </li>
-        </>) : (<>
-          <li>
-            <NavLink to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`} >Dashboard</NavLink>
-          </li>
-          <li>
-            <NavLink onClick={handleLogOut} to="/login" >Log Out</NavLink>
-          </li>
-        </>)}
-        <li>
-          <Badge count={cart?.length} showZero>
-            <NavLink to="/cart" >Cart</NavLink>
-          </Badge>
-        </li>
-      </ul> */}
-    </nav >
-  )
-}
-export default Header
+export default Header;
