@@ -2,13 +2,26 @@ import JWT from "jsonwebtoken";
 import userModel from "../models/userModel.js";
 
 //to check whether is user registered or not if yes then it will allow to sign or else it just stops or show error
-export const requireSignIn = async (req,res,next) => {
+export const requireSignIn = async (req, res, next) => {
     try {
-        const decode = JWT.verify(req.headers.authorization, process.env.JWT_SECRET);
+        const authHeader = req.headers.authorization;
+        if (!authHeader) {
+            return res.status(401).send({
+                success: false,
+                message: "Authorization token is required"
+            });
+        }
+        // Strip "Bearer " prefix if present
+        const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
+        const decode = JWT.verify(token, process.env.JWT_SECRET);
         req.user = decode;
         next();
     } catch (error) {
         console.log(error);
+        res.status(401).send({
+            success: false,
+            message: "Invalid or expired token"
+        });
     }
 }
 
@@ -17,7 +30,7 @@ export const isAdmin = async(req,res,next) => {
     try {
         const user = await userModel.findById(req.user._id);
         if(user.role !== 1){
-            return res.status(401).send({
+            return res.send({
                 success:false,
                 message:"UnAuthorized Access"
             })

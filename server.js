@@ -5,6 +5,8 @@ import morgan from "morgan";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoute.js"
 import cors from "cors"
+import categoryRoute from "./routes/categoryRoute.js"
+import productRoute from "./routes/productRoute.js"
 
 dotenv.config();
 
@@ -21,11 +23,23 @@ app.use(morgan('dev'));
 
 //routes
 app.use('/api/v1/auth',authRoutes);
+app.use('/api/v1/category',categoryRoute);
+app.use('/api/v1/product', productRoute);
 
 //rest api
 app.get("/",(req,res)=>{
     res.send("<h1>Welcome to my ecommerce website</h1>");
 } );
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send({
+        success: false,
+        message: "Internal Server Error",
+        error: process.env.NODE_ENV === "development" ? err.message : undefined
+    });
+});
 
 //port
 const PORT = process.env.PORT;
