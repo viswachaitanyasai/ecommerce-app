@@ -38,14 +38,12 @@ export const registerController = async (req, res) => {
         //register user
         const hashedPassword = await hashPassword(password);
 
-        // Exclude password from the user object in the response
         const user = await new userModel({ name, email, phone, address, password: hashedPassword, answer }).save();
-        const { password: _, ...safeUser } = user.toObject();
 
         res.status(201).send({
             success: true,
             message: "User Register Successful",
-            user: safeUser
+            user
         })
     } catch (error) {
         console.log(error);
@@ -95,7 +93,7 @@ export const loginController = async (req, res) => {
             message: "LogIn successfull",
             user: {
                 name: user.name,
-                email: user.email,
+                email: user.name,
                 phone: user.phone,
                 address: user.address,
                 role: user.role
@@ -117,21 +115,21 @@ export const forgotPasswordController = async (req, res) => {
     try {
         const { email, answer, newPassword } = req.body;
         if (!email) {
-            return res.status(400).send({ message: "Email is required" });
+            res.status(400).send({ message: "Email is required" });
         }
         if (!answer) {
-            return res.status(400).send({ message: "Answer is required" });
+            res.status(400).send({ message: "Answer is required" });
         }
         if (!newPassword) {
-            return res.status(400).send({ message: "New Password is required" });
+            res.status(400).send({ message: " New Password is required" });
         }
         //check in db
         const user = await userModel.findOne({ email, answer });
         if (!user) {
-            return res.status(404).send({
+            res.status(404).send({
                 success: false,
                 message: "Wrong Email or Answer"
-            });
+            })
         }
         const hashed = await hashPassword(newPassword);
         await userModel.findByIdAndUpdate(user._id, { password: hashed });
@@ -220,12 +218,12 @@ export const orderStatusController = async (req, res) => {
     try {
         const { orderId } = req.params;
         const { status } = req.body;
-        const order = await orderModel.findByIdAndUpdate(
+        const orders = await orderModel.findByIdAndUpdate(
             orderId,
             { status },
             { new: true }
         );
-        res.json(order);
+        res.json(orders);
     } catch (error) {
         console.log(error);
         res.status(500).send({

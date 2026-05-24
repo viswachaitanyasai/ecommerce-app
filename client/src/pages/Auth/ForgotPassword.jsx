@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
-    const [answer, setAnswer] = useState("");
+    const [answer, setNewAnswer] = useState("");
 
     const navigate = useNavigate();
 
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
                             value={answer}
                             type='text'
                             placeholder='answer'
-                            onChange={(e) => setAnswer(e.target.value)}
+                            onChange={(e) => setNewAnswer(e.target.value)}
                             required
                         />
                         <input

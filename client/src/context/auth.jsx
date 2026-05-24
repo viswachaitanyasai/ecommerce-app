@@ -1,4 +1,5 @@
-import { useState, useEffect, useContext, createContext } from "react";
+import { useState, useEffect, useContext, createContext, parse } from "react";
+import { token } from "morgan";
 import axios from "axios";
 
 const AuthContext = createContext();
@@ -9,14 +10,9 @@ const AuthProvider = ({ children }) => {
     token: "",
   });
 
-  // Update axios default auth header whenever token changes
-  useEffect(() => {
-    if (auth?.token) {
-      axios.defaults.headers.common["Authorization"] = auth.token;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-    }
-  }, [auth.token]);
+  //default axios
+  axios.defaults.headers.common["Authorization"] = auth?.token;
+
 
   useEffect(() => {
     const data = localStorage.getItem("auth");

@@ -86,6 +86,10 @@ const Homepage = () => {
     setChecked(all);
   }
 
+  useEffect(() => {
+    if (!checked.length || radio.length) getAllProducts();
+  }, [checked.length, radio.length])
+
   const filterProducts = async () => {
     try {
       const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/product-filters`, { checked, radio });
@@ -103,11 +107,7 @@ const Homepage = () => {
   }
 
   useEffect(() => {
-    if (checked.length || radio.length) {
-      filterProducts();
-    } else {
-      getAllProducts();
-    }
+    if (checked.length || radio.length) filterProducts();
   }, [checked, radio])
   return (
     <Layout>
@@ -123,7 +123,7 @@ const Homepage = () => {
           </div>
           <div className='app__home-filter-check'>
             <NavDropdown title="Price" id="basic-proce-dropdown" className='app__home-dropdown text-slate-500'>
-              <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+              <Radio.Group className='p-2' onChange={(e) => setRadio(e.target.value)}>
                 {Prices.map(p => (
                   <div key={p._id}>
                     <Radio value={p.array}>{p.name}</Radio>

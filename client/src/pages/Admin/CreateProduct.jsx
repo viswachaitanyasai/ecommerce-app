@@ -44,12 +44,12 @@ const CreateProduct = () => {
             productData.append("quantity", quantity);
             productData.append("photo", photo);
             productData.append("category", category);
-            const { data } = await axios.post(`${process.env.REACT_APP_API}/api/v1/product/create-product`, productData)
+            const data = axios.post(`${process.env.REACT_APP_API}/api/v1/product/create-product`, productData)
             if (data?.success) {
+                toast.error(data?.message);
+            } else {
                 toast.success("Product created Successfully");
                 navigate("/dashboard/admin/products");
-            } else {
-                toast.error(data?.message || "Failed to create product");
             }
         } catch (error) {
             console.log(error);
@@ -60,7 +60,7 @@ const CreateProduct = () => {
     return (
         <>
             <AdminDashboard>
-                <div className='app__admin-dashboard flex flex-col items-center py-6'>
+                <div className='flex flex-col items-center py-6'>
                     <h1>CreateProduct</h1>
                     <div className='w-[90%] space-y-4 md:w-[60%]'>
                         <Select bordered={false} placeholder="Select a Category" size='large' showSearch onChange={(value) => { setCategory(value) }}>
@@ -115,7 +115,7 @@ const CreateProduct = () => {
                                 />
                             </div>
                             <Select
-                                bordered={false}
+                                variant={false}
                                 placeholder='Select Shipping'
                                 size='large'
                                 showSearch
