@@ -1,0 +1,26 @@
+
+.app__menu-list-links{
+    display: flex;
+    flex-direction: column;
+    a{
+        display: flex;
+        text-decoration: none;
+        background-color: var(--primary-color);
+        padding: 2rem;
+        width: 17rem;
+        justify-content: center;
+        align-items: center;
+        font-size:large;
+    }
+    .link-1{
+        border: 1px solid var(--gray-color);
+        border-top-right-radius: 1rem;
+    }
+    .link-2{
+        border-right: 1px solid var(--gray-color);
+    }
+    .link-3{
+        border: 1px solid var(--gray-color);
+        border-bottom-right-radius: 1rem;
+    }
+}

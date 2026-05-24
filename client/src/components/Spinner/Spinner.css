@@ -1,0 +1,10 @@
+.spinner-page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 40rem;
+  flex-direction: column;
+  h1{
+    padding: 2rem;
+  }
+}

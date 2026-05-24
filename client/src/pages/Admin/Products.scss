@@ -1,0 +1,12 @@
+.app__admin-dashboard{
+    display: flex;
+    flex-direction: row;
+}
+
+.product-link{
+    text-decoration: none;
+    color: black;
+    img{
+        width: 15rem;
+    }
+}

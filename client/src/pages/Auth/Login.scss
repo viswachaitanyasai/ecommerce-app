@@ -1,0 +1,87 @@
+.app__login{
+    padding: 1.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.app__login-form-box{
+    width: 36%;
+    padding: 2rem;
+    background-color: var(--primary-color);
+    border-radius: 1rem;
+}
+
+.app__login-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .button_box{
+        display: flex;
+        width: 100%;
+        justify-content:space-around;
+    }
+    .button-1{
+        padding: 0.6rem;
+        margin-top: 1rem;
+        width: 11rem;
+        font-size: 0.9rem;
+        display: flex;
+        align-items:center;
+        justify-content: center;
+        background-color: var(--primary-color);
+        // color: var(--primary-color);
+        border: none;
+        border-radius: 1rem;
+        transition: all 0.2s ease-in-out;
+        &:hover{
+            scale: 1.1;
+        }
+    }
+    .button-2{
+        padding: 0.6rem;
+        margin-top: 1rem;
+        width: 7rem;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--secondary-color);
+        color: var(--primary-color);
+        border: none;
+        border-radius: 1rem;
+        transition: all 0.2s ease-in-out;
+        &:hover{
+            scale: 1.1;
+        }
+    }
+}
+
+.app__login-form1{
+    padding: 1rem 1rem 0 1rem;
+    display: flex;
+    flex-direction: row;
+    div{
+        padding: 1rem 1rem 0 1rem;
+    }
+    input{
+        padding: 0.7rem;
+        margin: 0.5rem 0;
+        border-radius: 0.4rem;
+        border-style:hidden;
+    }
+}
+
+.app__login-form2{
+    padding: 0rem 2rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    width: 110%;
+    input{
+        padding: 0.7rem;
+        margin: 0.5rem 0;
+        border-radius: 0.4rem;
+        border-style:hidden;
+    }
+}
